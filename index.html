@@ -6,24 +6,26 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="theme-color" content="#0a0806" />
-<title>El Padrino del Pretérito · Micah · v6</title>
+<title>El Padrino del Pretérito · Micah · v8</title>
 <style>
   :root {
-    --bg-deep: #050402;
-    --bg-dark: #0F0B07;
-    --bg-card: #1A1410;
-    --bg-card-elev: #221A14;
-    --border: #3D2F22;
-    --border-bright: #5A4630;
-    --gold: #C9A961;
-    --gold-bright: #E5C77F;
-    --gold-deep: #8B7340;
-    --red: #6B1818;
-    --red-bright: #8B2A2A;
+    --bg-deep: #020100;
+    --bg-dark: #08050A;
+    --bg-card: #110A06;
+    --bg-card-elev: #1C120A;
+    --border: #2A1F14;
+    --border-bright: #4A3520;
+    --gold: #D4AF37;
+    --gold-bright: #F4D77A;
+    --gold-deep: #8B6F23;
+    --gold-vintage: #B8941F;
+    --red: #5C0A0A;
+    --red-bright: #8B0000;
+    --red-blood: #4A0000;
     --green: #4A6B3A;
-    --cream: #E8DCC4;
-    --cream-dim: #B8A988;
-    --muted: #6B5D48;
+    --cream: #EDE0C5;
+    --cream-dim: #A89880;
+    --muted: #5A4A38;
     --font-display: 'Bodoni 72', 'Didot', 'Playfair Display', Georgia, 'Times New Roman', serif;
     --font-caps: 'Bodoni 72 Smallcaps', 'Optima', 'Bodoni 72', Georgia, serif;
     --font-italic: 'Bodoni 72', 'Didot', 'Playfair Display', Georgia, serif;
@@ -35,7 +37,10 @@
   body {
     margin: 0;
     font-family: var(--font-body);
-    background: radial-gradient(ellipse at top, #1F1812 0%, var(--bg-dark) 45%, var(--bg-deep) 100%);
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 25%, #2C1810 0%, transparent 70%),
+      radial-gradient(ellipse 100% 60% at 50% 100%, #1A0A0A 0%, transparent 60%),
+      linear-gradient(180deg, #0A0604 0%, #050200 100%);
     background-attachment: fixed;
     min-height: 100vh;
     color: var(--cream);
@@ -43,13 +48,45 @@
     -webkit-font-smoothing: antialiased;
     overscroll-behavior: contain;
   }
+  /* Layer 1: leather-grain texture overlay (offline SVG) */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
     pointer-events: none;
-    background-image: radial-gradient(circle at 50% 0%, transparent 0%, rgba(0,0,0,0.4) 100%);
     z-index: 1;
+    opacity: 0.6;
+    background-image:
+      radial-gradient(ellipse 80% 70% at 50% 30%, transparent 30%, rgba(0,0,0,0.55) 80%, rgba(0,0,0,0.85) 100%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='280' height='280'><filter id='leather'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23leather)'/></svg>");
+  }
+  /* Layer 2: animated film grain */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.12;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 0.85  0 0 0 0 0.55  0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    animation: grain 0.5s steps(5) infinite;
+  }
+  @keyframes grain {
+    0%   { transform: translate(0,0); }
+    20%  { transform: translate(-4px,3px); }
+    40%  { transform: translate(3px,-4px); }
+    60%  { transform: translate(-2px,4px); }
+    80%  { transform: translate(4px,1px); }
+    100% { transform: translate(-1px,-2px); }
+  }
+  /* Layer 3: scattered "bullet hole" / dust specks (decorative) */
+  body > .specks {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.4;
   }
 
   .container {
@@ -66,37 +103,146 @@
   p { margin: 0 0 12px; }
   small, .muted, .sub { color: var(--cream-dim); }
 
-  /* Brand */
-  .brand { text-align: center; padding: 14px 0 24px; }
-  .brand .overline {
-    font-family: var(--font-caps);
-    font-size: 0.7rem;
-    letter-spacing: 0.4em;
-    color: var(--gold-deep);
-    margin-bottom: 6px;
-    text-transform: uppercase;
+  /* ============ BRAND — full movie-poster hero ============ */
+  .brand {
+    text-align: center;
+    padding: 30px 0 40px;
+    position: relative;
+    margin: 0 -14px 24px;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 50%, rgba(212,175,55,0.04) 0%, transparent 70%),
+      linear-gradient(180deg, #0F0905 0%, #050200 100%);
+    border-top: 1px solid var(--gold-deep);
+    border-bottom: 1px solid var(--gold-deep);
+    overflow: hidden;
   }
-  .brand h1 {
-    font-family: var(--font-caps);
-    font-size: 2.1rem;
-    color: var(--gold);
-    letter-spacing: 0.05em;
-    text-shadow: 0 2px 12px rgba(201,169,97,0.2);
-    text-transform: uppercase;
+  /* Spotlight cone from top — single hanging-bulb feel */
+  .brand::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180%;
+    height: 60%;
+    background: radial-gradient(ellipse at top, rgba(244,215,122,0.18) 0%, transparent 65%);
+    pointer-events: none;
   }
-  .brand .tagline {
+
+  /* Top credit strip — like 1972 movie credits */
+  .brand-credits {
+    font-family: var(--font-caps);
+    font-size: 0.55rem;
+    letter-spacing: 0.5em;
+    color: var(--gold-vintage);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    opacity: 0.7;
+    position: relative;
+  }
+  .brand-credits::before, .brand-credits::after {
+    content: '';
+    display: inline-block;
+    width: 30px;
+    height: 1px;
+    background: var(--gold-deep);
+    vertical-align: middle;
+    margin: 0 12px;
+    opacity: 0.5;
+  }
+
+  /* Hero fedora — full-width dramatic */
+  .hero-fedora {
+    width: 220px;
+    max-width: 65%;
+    height: auto;
+    margin: 0 auto 14px;
+    display: block;
+    filter:
+      drop-shadow(0 8px 24px rgba(0,0,0,0.9))
+      drop-shadow(0 0 40px rgba(212,175,55,0.12));
+    position: relative;
+  }
+  /* Smoke trails — drift upward */
+  .hero-fedora .smoke {
+    fill: none;
+    stroke: rgba(212,175,55,0.35);
+    stroke-width: 1.2;
+    stroke-linecap: round;
+    animation: smoke 4s ease-in-out infinite;
+    transform-origin: center bottom;
+  }
+  .hero-fedora .smoke.s2 { animation-delay: -1.3s; animation-duration: 5s; opacity: 0.7; }
+  .hero-fedora .smoke.s3 { animation-delay: -2.6s; animation-duration: 6s; opacity: 0.5; }
+  @keyframes smoke {
+    0%   { opacity: 0; transform: translateY(0) scale(1); }
+    25%  { opacity: 0.6; }
+    100% { opacity: 0; transform: translateY(-30px) scale(1.4); }
+  }
+
+  /* "El Padrino" — script-like serif italic, BIG */
+  .el-padrino {
     font-family: var(--font-italic);
     font-style: italic;
-    color: var(--cream-dim);
-    font-size: 0.9rem;
-    margin-top: 6px;
+    font-weight: 700;
+    font-size: 3.2rem;
+    line-height: 0.95;
+    color: var(--gold-bright);
+    letter-spacing: -0.01em;
+    text-shadow:
+      0 2px 0 #1a0f00,
+      0 4px 0 #0a0604,
+      0 6px 12px rgba(0,0,0,0.9),
+      0 0 40px rgba(212,175,55,0.25);
+    margin: 0;
+    position: relative;
   }
-  .brand .rule {
-    width: 80px;
+
+  /* "Del Pretérito" — chiseled caps subtitle */
+  .del-preterito {
+    font-family: var(--font-caps);
+    font-size: 1.05rem;
+    font-weight: 900;
+    color: var(--gold);
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    margin-top: 4px;
+    text-shadow: 0 2px 0 #1a0f00, 0 0 20px rgba(212,175,55,0.2);
+    position: relative;
+  }
+  .del-preterito::before, .del-preterito::after {
+    content: '';
+    display: inline-block;
+    width: 28px;
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--gold-deep), transparent);
-    margin: 12px auto 0;
+    vertical-align: middle;
+    margin: 0 12px;
   }
+
+  /* Art deco flourish under title */
+  .deco-rule {
+    width: 200px;
+    max-width: 70%;
+    height: 24px;
+    margin: 18px auto 14px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 24'><line x1='0' y1='12' x2='60' y2='12' stroke='%23B8941F' stroke-width='1'/><line x1='140' y1='12' x2='200' y2='12' stroke='%23B8941F' stroke-width='1'/><line x1='10' y1='8' x2='50' y2='8' stroke='%238B6F23' stroke-width='0.5' opacity='0.7'/><line x1='10' y1='16' x2='50' y2='16' stroke='%238B6F23' stroke-width='0.5' opacity='0.7'/><line x1='150' y1='8' x2='190' y2='8' stroke='%238B6F23' stroke-width='0.5' opacity='0.7'/><line x1='150' y1='16' x2='190' y2='16' stroke='%238B6F23' stroke-width='0.5' opacity='0.7'/><polygon points='70,4 78,12 70,20 62,12' fill='%23D4AF37'/><polygon points='100,2 105,12 100,22 95,12' fill='%23F4D77A'/><polygon points='130,4 138,12 130,20 122,12' fill='%23D4AF37'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  /* Movie tagline — italic serif, quote treatment */
+  .tagline {
+    font-family: var(--font-italic);
+    font-style: italic;
+    color: var(--cream);
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+    margin: 0;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  }
+  .tagline::before { content: '“ '; color: var(--gold); font-size: 1.4em; vertical-align: -0.2em; }
+  .tagline::after  { content: ' ”'; color: var(--gold); font-size: 1.4em; vertical-align: -0.2em; }
 
   .page-header {
     display: flex;
@@ -190,100 +336,218 @@
     opacity: 0.4;
   }
 
-  /* Mode picker */
+  /* ============ MODE CARDS — movie poster panels ============ */
+  .mode-section-label {
+    font-family: var(--font-caps);
+    color: var(--gold-vintage);
+    font-size: 0.62rem;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 18px 0 16px;
+    opacity: 0.75;
+  }
+  .mode-section-label::before, .mode-section-label::after {
+    content: '';
+    display: inline-block;
+    width: 36px;
+    height: 1px;
+    background: var(--gold-deep);
+    vertical-align: middle;
+    margin: 0 14px;
+    opacity: 0.6;
+  }
+
   .mode-card {
     display: block;
     text-align: left;
-    background: linear-gradient(180deg, var(--bg-card-elev) 0%, var(--bg-card) 100%);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 16px 18px;
-    margin-bottom: 12px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    background:
+      linear-gradient(135deg, rgba(212,175,55,0.06) 0%, transparent 50%),
+      linear-gradient(180deg, var(--bg-card-elev) 0%, var(--bg-card) 70%, #08050A 100%);
+    border: 1px solid var(--border-bright);
+    border-radius: 6px;
+    padding: 18px 20px 18px 22px;
+    margin-bottom: 16px;
+    box-shadow:
+      0 8px 24px rgba(0,0,0,0.7),
+      inset 0 1px 0 rgba(212,175,55,0.1),
+      inset 0 -1px 0 rgba(0,0,0,0.5);
     cursor: pointer;
-    transition: transform 0.1s ease, border-color 0.15s ease;
+    transition: transform 0.12s ease, border-color 0.15s ease, box-shadow 0.15s ease;
     width: 100%;
     font-family: inherit;
     color: var(--cream);
     position: relative;
     overflow: hidden;
     -webkit-tap-highlight-color: transparent;
+    min-height: 100px;
   }
+  /* Gold left rail with glow */
   .mode-card::before {
     content: '';
     position: absolute;
     left: 0; top: 0; bottom: 0;
-    width: 3px;
-    background: var(--gold-deep);
-    opacity: 0.6;
-    transition: opacity 0.15s ease, background 0.15s ease;
+    width: 4px;
+    background: linear-gradient(180deg, transparent, var(--gold) 30%, var(--gold) 70%, transparent);
+    opacity: 0.8;
+    transition: opacity 0.15s ease, box-shadow 0.15s ease;
   }
-  .mode-card:active { transform: translateY(1px); border-color: var(--gold-deep); }
-  .mode-card:active::before { background: var(--gold); opacity: 1; }
+  /* Top-right corner ornament — art deco */
+  .mode-card::after {
+    content: '';
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 20px; height: 20px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path d='M0 0 L20 0 L20 4 L4 4 L4 20 L0 20 Z' fill='%23B8941F' opacity='0.5'/></svg>");
+    background-repeat: no-repeat;
+  }
+  .mode-card:active {
+    transform: translateY(1px) scale(0.995);
+    border-color: var(--gold);
+    box-shadow:
+      0 2px 8px rgba(0,0,0,0.7),
+      inset 0 1px 0 rgba(212,175,55,0.15),
+      0 0 30px rgba(212,175,55,0.18);
+  }
+  .mode-card:active::before {
+    opacity: 1;
+    box-shadow: 0 0 16px var(--gold-bright);
+  }
   /* iOS fix: route all taps inside the mode card to the button itself,
-     and skip the 300ms double-tap-zoom delay. Without these, taps on the
-     inner icon/title/desc don't always fire the button's click handler. */
+     and skip the 300ms double-tap-zoom delay. */
   .mode-card * { pointer-events: none; }
   .btn, .mode-card, .back-btn, .voice-test, .replay-btn,
   .speaker-btn, .play-icon-btn, .mode3-toggle button { touch-action: manipulation; }
-  .mode-card .row { display: flex; align-items: center; gap: 14px; }
+
+  .mode-card .row { display: flex; align-items: center; gap: 16px; }
+
+  /* Icon as a SVG film-card badge — bigger, framed with corner notches */
   .mode-card .icon {
-    font-size: 1.5rem;
-    width: 50px; height: 50px;
+    width: 70px; height: 70px;
     border-radius: 4px;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
-    background: var(--bg-deep);
-    border: 1px solid var(--border-bright);
-    color: var(--gold);
+    background:
+      radial-gradient(circle at 30% 30%, rgba(212,175,55,0.1), transparent 60%),
+      linear-gradient(180deg, #1A0F08 0%, #050200 100%);
+    border: 1px solid var(--gold-deep);
+    color: var(--gold-bright);
+    box-shadow:
+      inset 0 1px 0 rgba(212,175,55,0.25),
+      inset 0 -1px 0 rgba(0,0,0,0.7),
+      0 4px 8px rgba(0,0,0,0.6);
+    position: relative;
   }
+  .mode-card .icon::before, .mode-card .icon::after {
+    content: '';
+    position: absolute;
+    width: 7px; height: 7px;
+    border: 1px solid var(--gold);
+  }
+  .mode-card .icon::before { top: 3px; left: 3px; border-right: 0; border-bottom: 0; }
+  .mode-card .icon::after  { bottom: 3px; right: 3px; border-left: 0; border-top: 0; }
+  .mode-card .icon svg {
+    width: 38px; height: 38px;
+    fill: var(--gold-bright);
+    stroke: var(--gold-bright);
+  }
+
   .mode-card .num {
     font-family: var(--font-caps);
-    color: var(--gold-deep);
-    font-size: 0.65rem;
-    letter-spacing: 0.3em;
-    margin-bottom: 2px;
+    color: var(--gold-vintage);
+    font-size: 0.6rem;
+    letter-spacing: 0.45em;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    opacity: 0.85;
   }
   .mode-card .title {
-    font-family: var(--font-display);
+    font-family: var(--font-italic);
+    font-style: italic;
     font-weight: 700;
-    font-size: 1.1rem;
-    color: var(--gold);
-    margin-bottom: 3px;
-    line-height: 1.2;
+    font-size: 1.55rem;
+    color: var(--gold-bright);
+    margin-bottom: 5px;
+    line-height: 1.05;
+    text-shadow: 0 1px 0 #1a0f00, 0 2px 6px rgba(0,0,0,0.6);
+    letter-spacing: -0.01em;
   }
   .mode-card .desc {
     color: var(--cream-dim);
     font-size: 0.82rem;
     line-height: 1.35;
   }
-  .mode-card .desc em { color: var(--cream); font-style: italic; }
+  .mode-card .desc em { color: var(--cream); font-style: italic; font-weight: 600; }
 
-  /* Mode 1: listening */
-  .listen-card { text-align: center; padding: 24px 18px; }
+  /* Mode 1: listening — vintage broadcast booth */
+  .listen-card {
+    text-align: center;
+    padding: 28px 18px;
+    position: relative;
+  }
+  /* Hanging-bulb spotlight effect on the listen card */
+  .listen-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 75%;
+    height: 200px;
+    background: radial-gradient(ellipse at top, rgba(244,215,122,0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
   .speaker-btn {
-    width: 110px; height: 110px;
+    width: 130px; height: 130px;
     border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, var(--bg-card-elev), var(--bg-deep));
-    color: var(--gold);
-    border: 2px solid var(--gold-deep);
-    font-size: 2.5rem;
+    background:
+      radial-gradient(circle at 30% 25%, rgba(244,215,122,0.18), transparent 50%),
+      radial-gradient(circle at 50% 50%, var(--bg-card-elev), var(--bg-deep));
+    color: var(--gold-bright);
+    border: 2px solid var(--gold);
     cursor: pointer;
     box-shadow:
-      inset 0 2px 8px rgba(201,169,97,0.1),
-      0 4px 0 #2a1a0a,
-      0 8px 24px rgba(0,0,0,0.6),
-      0 0 0 6px rgba(201,169,97,0.06);
-    margin: 12px 0;
+      inset 0 2px 12px rgba(244,215,122,0.15),
+      inset 0 -4px 12px rgba(0,0,0,0.6),
+      0 6px 0 #1a0f00,
+      0 12px 32px rgba(0,0,0,0.8),
+      0 0 0 8px rgba(212,175,55,0.06),
+      0 0 0 9px rgba(212,175,55,0.03);
+    margin: 14px 0;
     transition: transform 0.08s ease;
     -webkit-tap-highlight-color: transparent;
+    padding: 0;
+    position: relative;
+    z-index: 2;
   }
-  .speaker-btn:active { transform: translateY(2px); }
-  .speaker-btn.playing { animation: goldPulse 1.3s ease-in-out infinite; }
+  .speaker-btn svg { width: 70px; height: 70px; }
+  .speaker-btn:active { transform: translateY(3px); box-shadow: inset 0 2px 12px rgba(244,215,122,0.15), inset 0 -4px 12px rgba(0,0,0,0.6), 0 3px 0 #1a0f00, 0 6px 16px rgba(0,0,0,0.8), 0 0 0 8px rgba(212,175,55,0.06); }
+  .speaker-btn.playing { animation: goldPulse 1.4s ease-in-out infinite; }
+  .speaker-btn.playing .mic-wave { animation: micWave 1.4s ease-in-out infinite; }
+  .speaker-btn.playing .mic-wave.w2 { animation-delay: 0.2s; }
   @keyframes goldPulse {
-    0%, 100% { box-shadow: inset 0 2px 8px rgba(201,169,97,0.1), 0 4px 0 #2a1a0a, 0 8px 24px rgba(0,0,0,0.6), 0 0 0 6px rgba(201,169,97,0.06); }
-    50% { box-shadow: inset 0 2px 8px rgba(201,169,97,0.1), 0 4px 0 #2a1a0a, 0 8px 32px rgba(201,169,97,0.4), 0 0 0 12px rgba(201,169,97,0.12); }
+    0%, 100% {
+      box-shadow:
+        inset 0 2px 12px rgba(244,215,122,0.15),
+        inset 0 -4px 12px rgba(0,0,0,0.6),
+        0 6px 0 #1a0f00,
+        0 12px 32px rgba(0,0,0,0.8),
+        0 0 0 8px rgba(212,175,55,0.06);
+    }
+    50% {
+      box-shadow:
+        inset 0 2px 12px rgba(244,215,122,0.3),
+        inset 0 -4px 12px rgba(0,0,0,0.6),
+        0 6px 0 #1a0f00,
+        0 12px 48px rgba(244,215,122,0.4),
+        0 0 0 14px rgba(212,175,55,0.15),
+        0 0 0 22px rgba(212,175,55,0.05);
+    }
   }
+  @keyframes micWave {
+    0%, 100% { opacity: 0; transform: scale(0.85); }
+    50%      { opacity: 0.8; transform: scale(1); }
+  }
+  .mic-wave { transform-origin: 30px 30px; transform-box: fill-box; }
   .replay-btn {
     background: transparent;
     color: var(--cream-dim);
@@ -382,6 +646,107 @@
   .score-item.correct .num { color: var(--gold-bright); }
   .score-item.wrong .num { color: var(--red-bright); }
   .score-item.remaining .num { color: var(--cream); }
+  .score-item.streak::before { background: linear-gradient(90deg, var(--gold), var(--red-bright)); }
+  .score-item.streak .num { color: var(--gold-bright); }
+  .score-item.streak.hot { animation: streakPulse 0.6s ease; }
+  .score-item.streak.hot .num {
+    color: var(--gold-bright);
+    text-shadow: 0 0 12px var(--gold), 0 0 4px #fff;
+  }
+  @keyframes streakPulse {
+    0%, 100% { transform: scale(1); }
+    40%      { transform: scale(1.15); }
+  }
+
+  /* Streak banner — slides in from top when streak hits a milestone */
+  .streak-banner {
+    background: linear-gradient(90deg, transparent, rgba(201,169,97,0.15), transparent);
+    border-top: 1px solid var(--gold-deep);
+    border-bottom: 1px solid var(--gold-deep);
+    padding: 8px 12px;
+    text-align: center;
+    font-family: var(--font-caps);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--gold-bright);
+    margin-bottom: 14px;
+    text-shadow: 0 0 8px rgba(201,169,97,0.4);
+    animation: bannerIn 0.3s ease;
+  }
+  @keyframes bannerIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Cinematic rank reveal — Mode 2 end screen */
+  .rank-reveal {
+    text-align: center;
+    padding: 22px 12px 18px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 18px;
+    position: relative;
+  }
+  .rank-reveal::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(201,169,97,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .rank-overline {
+    font-family: var(--font-caps);
+    color: var(--gold-deep);
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  .rank-title {
+    font-family: var(--font-caps);
+    color: var(--gold-bright);
+    font-size: 2.4rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1;
+    text-shadow:
+      0 2px 12px rgba(201,169,97,0.4),
+      0 0 30px rgba(201,169,97,0.2),
+      0 4px 0 #1a0f00;
+    position: relative;
+    animation: rankIn 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.3);
+  }
+  @keyframes rankIn {
+    from { opacity: 0; transform: scale(0.6) translateY(20px); letter-spacing: 0.3em; }
+    to   { opacity: 1; transform: scale(1) translateY(0); letter-spacing: 0.08em; }
+  }
+  .rank-flair {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 8px 0 6px;
+    color: var(--gold-deep);
+    font-family: var(--font-caps);
+    font-size: 1rem;
+  }
+  .rank-flair .rank-pct {
+    color: var(--cream);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+  }
+  .rank-quote {
+    font-family: var(--font-italic);
+    font-style: italic;
+    color: var(--cream-dim);
+    font-size: 1rem;
+    margin-top: 8px;
+  }
+  .rank-quote::before { content: '— '; color: var(--gold-deep); }
+  .end-msg { color: var(--cream-dim); font-style: italic; font-size: 0.9rem; }
   .round-pill {
     display: inline-block;
     background: var(--bg-card);
@@ -396,17 +761,53 @@
     margin-bottom: 12px;
   }
 
-  .verb-flash { text-align: center; padding: 28px 18px; }
+  .verb-flash {
+    text-align: center;
+    padding: 32px 18px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Hanging interrogation bulb — narrow cone of light from top */
+  .verb-flash::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 110%;
+    height: 220px;
+    background:
+      radial-gradient(ellipse 50% 100% at 50% 0%, rgba(244,215,122,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 25% 60% at 50% 0%, rgba(244,215,122,0.25) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  /* The dangling bulb itself — small gold dot at top */
+  .verb-flash::after {
+    content: '';
+    position: absolute;
+    top: 4px; left: 50%;
+    transform: translateX(-50%);
+    width: 6px; height: 8px;
+    background: radial-gradient(circle, var(--gold-bright), var(--gold-deep));
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--gold-bright), 0 0 24px rgba(244,215,122,0.5);
+  }
   .verb-flash .verb {
     font-family: var(--font-italic);
     font-style: italic;
-    font-size: 3rem;
+    font-size: 3.4rem;
     font-weight: 700;
-    color: var(--gold);
+    color: var(--gold-bright);
     letter-spacing: -0.01em;
-    margin: 8px 0 6px;
+    margin: 14px 0 6px;
     word-break: break-word;
-    text-shadow: 0 2px 16px rgba(201,169,97,0.2);
+    text-shadow:
+      0 2px 0 #1a0f00,
+      0 4px 0 #0a0604,
+      0 6px 18px rgba(0,0,0,0.9),
+      0 0 32px rgba(244,215,122,0.35),
+      0 0 60px rgba(244,215,122,0.15);
+    position: relative;
+    z-index: 1;
   }
   .verb-flash .ctx {
     font-family: var(--font-italic);
@@ -794,10 +1195,42 @@
   <!-- ============ HOME ============ -->
   <section id="screen-home">
     <div class="brand">
-      <div class="overline">— El Padrino del —</div>
-      <h1>Pretérito</h1>
-      <div class="tagline">"An offer you can't refuse."</div>
-      <div class="rule"></div>
+      <div class="brand-credits">A Family Production · Starring Micah</div>
+
+      <svg class="hero-fedora" viewBox="0 0 300 150" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Smoke trails rising from above the hat -->
+        <path class="smoke s1" d="M 150 30 Q 142 20 152 8 Q 162 -4 150 -16"/>
+        <path class="smoke s2" d="M 165 30 Q 175 18 165 4 Q 156 -8 168 -22"/>
+        <path class="smoke s3" d="M 135 30 Q 128 22 138 10 Q 148 -2 135 -16"/>
+
+        <!-- Drop shadow under brim -->
+        <ellipse cx="150" cy="138" rx="135" ry="6" fill="#000" opacity="0.7"/>
+
+        <!-- Fedora silhouette: bold, classic profile -->
+        <path d="M14 122 Q14 108 38 100 L62 56 Q72 24 102 14 Q150 4 198 14 Q228 24 238 56 L262 100 Q286 108 286 122 Q286 134 150 134 Q14 134 14 122 Z"
+              fill="#08050A" stroke="#D4AF37" stroke-width="1.4" stroke-linejoin="round"/>
+
+        <!-- Subtle inner crown crease -->
+        <path d="M52 104 Q150 90 248 104" stroke="#8B6F23" stroke-width="0.8" fill="none" opacity="0.7"/>
+        <path d="M86 70 Q150 56 214 70" stroke="#5A4520" stroke-width="0.5" fill="none" opacity="0.5"/>
+
+        <!-- Blood-red hatband with gold pinstripes -->
+        <rect x="62" y="56" width="176" height="10" fill="#5C0A0A"/>
+        <rect x="62" y="56" width="176" height="1" fill="#D4AF37"/>
+        <rect x="62" y="65" width="176" height="1" fill="#3D0A0A"/>
+
+        <!-- Tiny gold pin on band -->
+        <circle cx="150" cy="61" r="2.5" fill="#F4D77A"/>
+        <circle cx="150" cy="61" r="1" fill="#5C0A0A"/>
+
+        <!-- Brim shadow line -->
+        <path d="M14 122 Q150 116 286 122" stroke="#000" stroke-width="2" fill="none" opacity="0.5"/>
+      </svg>
+
+      <div class="el-padrino">El Padrino</div>
+      <div class="del-preterito">del Pretérito</div>
+      <div class="deco-rule"></div>
+      <div class="tagline">An offer you can't refuse.</div>
     </div>
 
     <div class="voice-card">
@@ -817,35 +1250,69 @@
       </select>
     </div>
 
+    <div class="mode-section-label">Three Acts</div>
+
     <button type="button" class="mode-card m1" data-mode="mode1">
       <div class="row">
-        <div class="icon">🎧</div>
+        <div class="icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Vintage speaker / radio cone -->
+            <path d="M5 14 L14 14 L23 6 L23 34 L14 26 L5 26 Z" fill="currentColor"/>
+            <path d="M27 13 Q33 20 27 27" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <path d="M31 9 Q39 20 31 31" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.7"/>
+          </svg>
+        </div>
         <div>
-          <div class="num">— I —</div>
+          <div class="num">— Atto Primo —</div>
           <div class="title">Escuchar</div>
-          <div class="desc"><em>The whisper.</em> Listen. Translate.</div>
+          <div class="desc"><em>The Whisper.</em> A wiretap from the Don. Listen. Translate.</div>
         </div>
       </div>
     </button>
 
     <button type="button" class="mode-card m2" data-mode="mode2">
       <div class="row">
-        <div class="icon">🎯</div>
+        <div class="icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Crosshair / target reticle -->
+            <circle cx="20" cy="20" r="14" stroke="currentColor" stroke-width="2" fill="none"/>
+            <circle cx="20" cy="20" r="7" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.7"/>
+            <line x1="20" y1="2" x2="20" y2="9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="20" y1="31" x2="20" y2="38" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="2" y1="20" x2="9" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="31" y1="20" x2="38" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="20" cy="20" r="1.8" fill="currentColor"/>
+          </svg>
+        </div>
         <div>
-          <div class="num">— II —</div>
-          <div class="title">Verb Review</div>
-          <div class="desc"><em>The interrogation.</em> 80 conjugated verbs. Missed ones come back.</div>
+          <div class="num">— Atto Secondo —</div>
+          <div class="title">The Interrogation</div>
+          <div class="desc"><em>80 verbs in the chair.</em> Answer or take the fall. Missed ones come back.</div>
         </div>
       </div>
     </button>
 
     <button type="button" class="mode-card m3" data-mode="mode3">
       <div class="row">
-        <div class="icon">📜</div>
+        <div class="icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Open codex / book of the family code -->
+            <path d="M4 8 L20 12 L36 8 L36 32 L20 36 L4 32 Z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/>
+            <line x1="20" y1="12" x2="20" y2="36" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="8" y1="16" x2="17" y2="17" stroke="currentColor" stroke-width="0.9" opacity="0.8"/>
+            <line x1="8" y1="20" x2="17" y2="21" stroke="currentColor" stroke-width="0.9" opacity="0.8"/>
+            <line x1="8" y1="24" x2="15" y2="25" stroke="currentColor" stroke-width="0.9" opacity="0.8"/>
+            <line x1="8" y1="28" x2="14" y2="29" stroke="currentColor" stroke-width="0.9" opacity="0.8"/>
+            <line x1="23" y1="17" x2="32" y2="16" stroke="currentColor" stroke-width="0.9" opacity="0.8"/>
+            <line x1="23" y1="21" x2="32" y2="20" stroke="currentColor" stroke-width="0.9" opacity="0.8"/>
+            <line x1="23" y1="25" x2="30" y2="24" stroke="currentColor" stroke-width="0.9" opacity="0.8"/>
+            <line x1="23" y1="29" x2="29" y2="28" stroke="currentColor" stroke-width="0.9" opacity="0.8"/>
+          </svg>
+        </div>
         <div>
-          <div class="num">— III —</div>
-          <div class="title">Conjugations</div>
-          <div class="desc"><em>The code.</em> Recite, then reveal & hear. Or test yourself.</div>
+          <div class="num">— Atto Terzo —</div>
+          <div class="title">The Family Code</div>
+          <div class="desc"><em>Every soldato knows it.</em> Recite, hear it, or test yourself.</div>
         </div>
       </div>
     </button>
@@ -867,7 +1334,22 @@
       <div style="font-family: var(--font-caps); font-size:0.65rem; text-transform:uppercase; letter-spacing:0.2em; color:var(--muted);">
         <span id="m1-counter">1 / 1</span>
       </div>
-      <button class="speaker-btn" id="m1-speaker" onclick="m1Play()">🔊</button>
+      <button class="speaker-btn" id="m1-speaker" onclick="m1Play()" aria-label="Play sentence">
+        <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Vintage 1940s broadcast microphone -->
+          <circle cx="30" cy="22" r="14" stroke="currentColor" stroke-width="2.5" fill="rgba(212,175,55,0.05)"/>
+          <line x1="23" y1="14" x2="23" y2="30" stroke="currentColor" stroke-width="1.6"/>
+          <line x1="27" y1="12" x2="27" y2="32" stroke="currentColor" stroke-width="1.6"/>
+          <line x1="30" y1="11" x2="30" y2="33" stroke="currentColor" stroke-width="1.8"/>
+          <line x1="33" y1="12" x2="33" y2="32" stroke="currentColor" stroke-width="1.6"/>
+          <line x1="37" y1="14" x2="37" y2="30" stroke="currentColor" stroke-width="1.6"/>
+          <line x1="30" y1="38" x2="30" y2="48" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="22" y1="50" x2="38" y2="50" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Sound waves (animated when playing) -->
+          <path class="mic-wave w1" d="M44 16 Q50 22 50 30 Q50 38 44 44" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none" opacity="0"/>
+          <path class="mic-wave w2" d="M16 16 Q10 22 10 30 Q10 38 16 44" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none" opacity="0"/>
+        </svg>
+      </button>
       <div>
         <button class="replay-btn" onclick="m1Play()">↻ Replay</button>
       </div>
@@ -905,7 +1387,9 @@
       <div class="score-item correct"><div class="num" id="m2-correct">0</div><div class="label">Correct</div></div>
       <div class="score-item wrong"><div class="num" id="m2-wrong">0</div><div class="label">Missed</div></div>
       <div class="score-item remaining"><div class="num" id="m2-remaining">80</div><div class="label">Left</div></div>
+      <div class="score-item streak"><div class="num" id="m2-streak">0</div><div class="label">Streak</div></div>
     </div>
+    <div id="m2-streak-banner" class="streak-banner hidden"></div>
 
     <div class="card verb-flash" id="m2-card">
       <div class="hint">What does this mean in English?</div>
@@ -926,11 +1410,19 @@
     </div>
 
     <div class="card end-screen hidden" id="m2-end">
-      <div class="emoji">🥃</div>
-      <h2>It's Done.</h2>
-      <p id="m2-end-msg"></p>
+      <div class="rank-reveal" id="m2-rank-reveal">
+        <div class="rank-overline">— La Famiglia ti nomina —</div>
+        <div class="rank-title" id="m2-rank-title">Soldato</div>
+        <div class="rank-flair">
+          <span class="rank-star">✦</span>
+          <span class="rank-pct" id="m2-rank-pct">75%</span>
+          <span class="rank-star">✦</span>
+        </div>
+        <div class="rank-quote" id="m2-rank-quote">"You did good, kid."</div>
+      </div>
+      <p id="m2-end-msg" class="end-msg"></p>
       <div class="review-list hidden" id="m2-review">
-        <div class="review-title">Verbos a repasar — review these</div>
+        <div class="review-title">Verbos a repasar — sleeping with the fishes</div>
         <div id="m2-review-rows"></div>
       </div>
       <div class="btn-row" style="margin-top:18px;">
@@ -1226,6 +1718,42 @@
   }
   function m1Restart() { m1Init(); }
 
+  // ---------- MAFIA PHRASES & RANKS ----------
+  const MAFIA_RIGHT = [
+    "Bravo!", "Capisci, eh?", "That's-a my boy.", "Madonn', perfetto!",
+    "Bellissimo.", "Famiglia.", "Buono, buono.", "Eh, eh, eh — bravo.",
+    "The Don approves.", "Che bello.", "Salute!", "Mamma mia, sì."
+  ];
+  const MAFIA_WRONG = [
+    "Eh, fuhgeddaboutit...", "Mamma mia, no.", "The Don is not pleased.",
+    "Sleeping with the fishes.", "Madonn', come on.", "Capisci niente?",
+    "You disappoint the famiglia.", "Eh, eh, eh — no.",
+    "Try again, soldato.", "Ay, ay, ay."
+  ];
+  const STREAK_MILESTONES = {
+    3:  "TRE IN A ROW",
+    5:  "ON FIRE — CINQUE!",
+    7:  "CAPISCI, CAPISCI!",
+    10: "MOLTO BENE — DIECI!",
+    15: "LA FAMIGLIA SI INCHINA",
+    20: "IL PADRINO!"
+  };
+  const RANKS = [
+    // [minPct, title, quote]
+    [  0, "Pivello",     "Stay in school, kid."],
+    [ 25, "Picciotto",   "Eh, you're learning. Slowly."],
+    [ 45, "Soldato",     "You did good, kid. The family sees you."],
+    [ 65, "Capo",        "You earned your stripes."],
+    [ 80, "Consigliere", "The Don listens when you speak."],
+    [ 92, "Il Padrino",  "An offer no one can refuse."]
+  ];
+  function pickPhrase(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  function rankFor(pct) {
+    let r = RANKS[0];
+    for (const candidate of RANKS) if (pct >= candidate[0]) r = candidate;
+    return r;
+  }
+
   // ---------- MODE 2 ----------
   let m2Queue = [];
   let m2Missed = [];      // current round's misses
@@ -1234,6 +1762,8 @@
   let m2Correct = 0;
   let m2Wrong = 0;
   let m2Round = 1;
+  let m2Streak = 0;
+  let m2BestStreak = 0;
 
   function m2Restart() {
     m2Queue = shuffle(M2_ALL.slice());
@@ -1243,16 +1773,20 @@
     m2Correct = 0;
     m2Wrong = 0;
     m2Round = 1;
+    m2Streak = 0;
+    m2BestStreak = 0;
     document.getElementById('m2-end').classList.add('hidden');
     document.getElementById('m2-round-end').classList.add('hidden');
     document.getElementById('m2-card').classList.remove('hidden');
     document.getElementById('m2-round-pill').classList.add('hidden');
+    document.getElementById('m2-streak-banner').classList.add('hidden');
     m2Render();
   }
   function m2Render() {
     document.getElementById('m2-correct').textContent = m2Correct;
     document.getElementById('m2-wrong').textContent = m2Wrong;
     document.getElementById('m2-remaining').textContent = m2Queue.length;
+    document.getElementById('m2-streak').textContent = m2Streak;
     document.getElementById('m2-feedback').className = 'feedback';
     document.getElementById('m2-input').value = '';
     if (m2Queue.length === 0) {
@@ -1275,14 +1809,26 @@
     const cur = m2Queue[0];
     const ans = normalize(document.getElementById('m2-input').value);
     const fb = document.getElementById('m2-feedback');
+    const banner = document.getElementById('m2-streak-banner');
+    const streakEl = document.getElementById('m2-streak');
     if (!ans) return;
     const isCorrect = cur.answers.some(a => normalize(a) === ans);
     const verbId = `${cur.form}|${cur.inf}|${cur.pronoun}|${cur.ctx || ''}`;
     if (isCorrect) {
-      // First-attempt only scoring
       if (m2Round === 1) m2Correct++;
+      m2Streak++;
+      if (m2Streak > m2BestStreak) m2BestStreak = m2Streak;
+      streakEl.textContent = m2Streak;
+      streakEl.parentElement.classList.remove('hot');
+      void streakEl.parentElement.offsetWidth; // restart animation
+      streakEl.parentElement.classList.add('hot');
       fb.className = 'feedback correct';
-      fb.innerHTML = '✓ Correcto';
+      fb.innerHTML = '✓ ' + pickPhrase(MAFIA_RIGHT);
+      // Streak milestone banner
+      if (STREAK_MILESTONES[m2Streak]) {
+        banner.textContent = '★  ' + STREAK_MILESTONES[m2Streak] + '  ★';
+        banner.classList.remove('hidden');
+      }
     } else {
       if (m2Round === 1) {
         m2Wrong++;
@@ -1290,22 +1836,33 @@
         m2AllMissed.push(cur);
       }
       m2Missed.push(cur);
+      m2Streak = 0;
+      streakEl.textContent = '0';
+      streakEl.parentElement.classList.remove('hot');
+      banner.classList.add('hidden');
       fb.className = 'feedback wrong';
-      fb.innerHTML = '✗ Not quite<div class="answer">Answer: ' + cur.primary + '</div>';
+      fb.innerHTML = '✗ ' + pickPhrase(MAFIA_WRONG) + '<div class="answer">Answer: ' + cur.primary + '</div>';
     }
     m2Queue.shift();
-    setTimeout(m2Render, 1100);
+    setTimeout(m2Render, 1300);
   }
   function m2EndRound() {
     document.getElementById('m2-card').classList.add('hidden');
+    document.getElementById('m2-streak-banner').classList.add('hidden');
     if (m2Missed.length === 0) {
       const end = document.getElementById('m2-end');
       end.classList.remove('hidden');
       const total = M2_ALL.length;
-      document.getElementById('m2-end-msg').textContent =
+      // Rank reveal — based on first-attempt accuracy
+      const pct = total > 0 ? Math.round((m2Correct / total) * 100) : 0;
+      const rank = rankFor(pct);
+      document.getElementById('m2-rank-title').textContent = rank[1];
+      document.getElementById('m2-rank-pct').textContent = pct + '%';
+      document.getElementById('m2-rank-quote').textContent = rank[2];
+      document.getElementById('m2-end-msg').innerHTML =
         m2Round === 1
-          ? `Perfect run — ${m2Correct} of ${total} on the first try.`
-          : `${m2Correct} of ${total} on the first try. Settled the rest by round ${m2Round}.`;
+          ? `Perfect run · best streak <strong style="color:var(--gold-bright)">${m2BestStreak}</strong> in a row.`
+          : `${m2Correct} / ${total} first try · best streak <strong style="color:var(--gold-bright)">${m2BestStreak}</strong> · settled by round ${m2Round}.`;
       const reviewWrap = document.getElementById('m2-review');
       const reviewRows = document.getElementById('m2-review-rows');
       reviewRows.innerHTML = '';
@@ -1336,8 +1893,10 @@
     m2Queue = shuffle(m2Missed);
     m2Missed = [];
     m2Round++;
+    m2Streak = 0;
     document.getElementById('m2-round-end').classList.add('hidden');
     document.getElementById('m2-card').classList.remove('hidden');
+    document.getElementById('m2-streak-banner').classList.add('hidden');
     const pill = document.getElementById('m2-round-pill');
     pill.textContent = `Round ${m2Round}`;
     pill.classList.remove('hidden');
@@ -1597,10 +2156,25 @@
     });
   });
 
+  // ---------- Cinematic title reveal — letters fade in one by one ----------
+  (function() {
+    const t = document.getElementById('brand-title');
+    if (!t) return;
+    const text = t.textContent;
+    t.textContent = '';
+    [...text].forEach((ch, i) => {
+      const span = document.createElement('span');
+      span.className = 'letter';
+      span.textContent = ch;
+      span.style.animationDelay = (60 + i * 70) + 'ms';
+      t.appendChild(span);
+    });
+  })();
+
   // ---------- Mark JS as fully initialized so we can confirm load on iPhone ----------
   (function() {
     var v = document.getElementById('js-version');
-    if (v) v.textContent = 'For Micah · v6 · ' + M1_ALL.length + ' sentences · ' + M2_ALL.length + ' verbs · Offline';
+    if (v) v.textContent = 'For Micah · v7 · ' + M1_ALL.length + ' sentences · ' + M2_ALL.length + ' verbs · Offline';
   })();
 </script>
 </body>
