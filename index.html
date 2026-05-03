@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#0a0806" />
+<title>El Padrino del Pretérito · Micah · v6</title>
+<style>
+  :root {
+    --bg-deep: #050402;
+    --bg-dark: #0F0B07;
+    --bg-card: #1A1410;
+    --bg-card-elev: #221A14;
+    --border: #3D2F22;
+    --border-bright: #5A4630;
+    --gold: #C9A961;
+    --gold-bright: #E5C77F;
+    --gold-deep: #8B7340;
+    --red: #6B1818;
+    --red-bright: #8B2A2A;
+    --green: #4A6B3A;
+    --cream: #E8DCC4;
+    --cream-dim: #B8A988;
+    --muted: #6B5D48;
+    --font-display: 'Bodoni 72', 'Didot', 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --font-caps: 'Bodoni 72 Smallcaps', 'Optima', 'Bodoni 72', Georgia, serif;
+    --font-italic: 'Bodoni 72', 'Didot', 'Playfair Display', Georgia, serif;
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    background: radial-gradient(ellipse at top, #1F1812 0%, var(--bg-dark) 45%, var(--bg-deep) 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: var(--cream);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: contain;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle at 50% 0%, transparent 0%, rgba(0,0,0,0.4) 100%);
+    z-index: 1;
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 16px 14px 80px;
+    padding-top: max(16px, env(safe-area-inset-top));
+    padding-bottom: max(80px, env(safe-area-inset-bottom));
+  }
+
+  h1, h2, h3 { font-family: var(--font-display); color: var(--gold); margin: 0; }
+  p { margin: 0 0 12px; }
+  small, .muted, .sub { color: var(--cream-dim); }
+
+  /* Brand */
+  .brand { text-align: center; padding: 14px 0 24px; }
+  .brand .overline {
+    font-family: var(--font-caps);
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    color: var(--gold-deep);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .brand h1 {
+    font-family: var(--font-caps);
+    font-size: 2.1rem;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    text-shadow: 0 2px 12px rgba(201,169,97,0.2);
+    text-transform: uppercase;
+  }
+  .brand .tagline {
+    font-family: var(--font-italic);
+    font-style: italic;
+    color: var(--cream-dim);
+    font-size: 0.9rem;
+    margin-top: 6px;
+  }
+  .brand .rule {
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-deep), transparent);
+    margin: 12px auto 0;
+  }
+
+  .page-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .page-header h1 {
+    font-size: 1.2rem;
+    flex: 1;
+    font-family: var(--font-caps);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 18px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 4px;
+    background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 50%, var(--gold-deep) 100%);
+    color: #1a0f00;
+    cursor: pointer;
+    min-height: 48px;
+    width: 100%;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.08s ease, box-shadow 0.1s ease, filter 0.1s ease;
+    box-shadow: 0 2px 0 #6B5320, 0 4px 12px rgba(0,0,0,0.4);
+    font-family: var(--font-caps);
+  }
+  .btn:active { transform: translateY(1px); box-shadow: 0 1px 0 #6B5320, 0 2px 6px rgba(0,0,0,0.4); }
+  .btn-secondary {
+    background: linear-gradient(180deg, var(--red-bright) 0%, var(--red) 100%);
+    color: var(--cream);
+    box-shadow: 0 2px 0 #3D0A0A, 0 4px 12px rgba(0,0,0,0.4);
+  }
+  .btn-secondary:active { box-shadow: 0 1px 0 #3D0A0A, 0 2px 6px rgba(0,0,0,0.4); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold-deep);
+    box-shadow: none;
+  }
+  .btn-ghost:active { background: rgba(201,169,97,0.15); }
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-row .btn { flex: 1; min-width: 0; }
+
+  .back-btn {
+    background: transparent;
+    color: var(--cream-dim);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 14px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    font-family: var(--font-caps);
+    text-transform: uppercase;
+    min-height: 38px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .back-btn:active { color: var(--gold); border-color: var(--gold-deep); }
+
+  /* Cards */
+  .card {
+    background: linear-gradient(180deg, var(--bg-card-elev) 0%, var(--bg-card) 100%);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 22px 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(201,169,97,0.06);
+    position: relative;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-deep), transparent);
+    opacity: 0.4;
+  }
+
+  /* Mode picker */
+  .mode-card {
+    display: block;
+    text-align: left;
+    background: linear-gradient(180deg, var(--bg-card-elev) 0%, var(--bg-card) 100%);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    cursor: pointer;
+    transition: transform 0.1s ease, border-color 0.15s ease;
+    width: 100%;
+    font-family: inherit;
+    color: var(--cream);
+    position: relative;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mode-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--gold-deep);
+    opacity: 0.6;
+    transition: opacity 0.15s ease, background 0.15s ease;
+  }
+  .mode-card:active { transform: translateY(1px); border-color: var(--gold-deep); }
+  .mode-card:active::before { background: var(--gold); opacity: 1; }
+  /* iOS fix: route all taps inside the mode card to the button itself,
+     and skip the 300ms double-tap-zoom delay. Without these, taps on the
+     inner icon/title/desc don't always fire the button's click handler. */
+  .mode-card * { pointer-events: none; }
+  .btn, .mode-card, .back-btn, .voice-test, .replay-btn,
+  .speaker-btn, .play-icon-btn, .mode3-toggle button { touch-action: manipulation; }
+  .mode-card .row { display: flex; align-items: center; gap: 14px; }
+  .mode-card .icon {
+    font-size: 1.5rem;
+    width: 50px; height: 50px;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    background: var(--bg-deep);
+    border: 1px solid var(--border-bright);
+    color: var(--gold);
+  }
+  .mode-card .num {
+    font-family: var(--font-caps);
+    color: var(--gold-deep);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    margin-bottom: 2px;
+  }
+  .mode-card .title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--gold);
+    margin-bottom: 3px;
+    line-height: 1.2;
+  }
+  .mode-card .desc {
+    color: var(--cream-dim);
+    font-size: 0.82rem;
+    line-height: 1.35;
+  }
+  .mode-card .desc em { color: var(--cream); font-style: italic; }
+
+  /* Mode 1: listening */
+  .listen-card { text-align: center; padding: 24px 18px; }
+  .speaker-btn {
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, var(--bg-card-elev), var(--bg-deep));
+    color: var(--gold);
+    border: 2px solid var(--gold-deep);
+    font-size: 2.5rem;
+    cursor: pointer;
+    box-shadow:
+      inset 0 2px 8px rgba(201,169,97,0.1),
+      0 4px 0 #2a1a0a,
+      0 8px 24px rgba(0,0,0,0.6),
+      0 0 0 6px rgba(201,169,97,0.06);
+    margin: 12px 0;
+    transition: transform 0.08s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .speaker-btn:active { transform: translateY(2px); }
+  .speaker-btn.playing { animation: goldPulse 1.3s ease-in-out infinite; }
+  @keyframes goldPulse {
+    0%, 100% { box-shadow: inset 0 2px 8px rgba(201,169,97,0.1), 0 4px 0 #2a1a0a, 0 8px 24px rgba(0,0,0,0.6), 0 0 0 6px rgba(201,169,97,0.06); }
+    50% { box-shadow: inset 0 2px 8px rgba(201,169,97,0.1), 0 4px 0 #2a1a0a, 0 8px 32px rgba(201,169,97,0.4), 0 0 0 12px rgba(201,169,97,0.12); }
+  }
+  .replay-btn {
+    background: transparent;
+    color: var(--cream-dim);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-bottom: 14px;
+    font-family: var(--font-caps);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .replay-btn:active { color: var(--gold); border-color: var(--gold-deep); }
+
+  textarea, input[type="text"] {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid var(--border-bright);
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: var(--font-italic);
+    resize: vertical;
+    background: rgba(10,8,6,0.5);
+    color: var(--cream);
+  }
+  textarea::placeholder, input::placeholder { color: var(--muted); font-style: italic; }
+  textarea:focus, input[type="text"]:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: rgba(10,8,6,0.7);
+    box-shadow: 0 0 0 2px rgba(201,169,97,0.15);
+  }
+
+  .reveal-box {
+    background: rgba(201,169,97,0.06);
+    border: 1px solid var(--gold-deep);
+    border-left: 3px solid var(--gold);
+    border-radius: 4px;
+    padding: 14px;
+    margin-top: 14px;
+    text-align: left;
+  }
+  .reveal-box .es {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--gold-bright);
+  }
+  .reveal-box .en { color: var(--cream); font-style: italic; font-family: var(--font-italic); }
+  .reveal-box .verb-tag {
+    display: inline-block;
+    background: var(--gold-deep);
+    color: var(--bg-deep);
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    margin-top: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-family: var(--font-caps);
+  }
+
+  /* Mode 2: verb review */
+  .scoreboard {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .score-item {
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 8px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .score-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    opacity: 0.7;
+  }
+  .score-item.correct::before { background: var(--gold); }
+  .score-item.wrong::before { background: var(--red-bright); }
+  .score-item.remaining::before { background: var(--cream-dim); }
+  .score-item .num { font-family: var(--font-caps); font-size: 1.4rem; font-weight: 700; line-height: 1; }
+  .score-item .label { font-family: var(--font-caps); font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.18em; margin-top: 5px; }
+  .score-item.correct .num { color: var(--gold-bright); }
+  .score-item.wrong .num { color: var(--red-bright); }
+  .score-item.remaining .num { color: var(--cream); }
+  .round-pill {
+    display: inline-block;
+    background: var(--bg-card);
+    color: var(--gold-deep);
+    font-family: var(--font-caps);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+
+  .verb-flash { text-align: center; padding: 28px 18px; }
+  .verb-flash .verb {
+    font-family: var(--font-italic);
+    font-style: italic;
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: -0.01em;
+    margin: 8px 0 6px;
+    word-break: break-word;
+    text-shadow: 0 2px 16px rgba(201,169,97,0.2);
+  }
+  .verb-flash .ctx {
+    font-family: var(--font-italic);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--cream-dim);
+    margin: 0 0 14px;
+    padding: 8px 12px;
+    background: rgba(10,8,6,0.4);
+    border-left: 2px solid var(--gold-deep);
+    border-radius: 2px;
+    text-align: left;
+  }
+  .verb-flash .ctx .label {
+    display: block;
+    font-family: var(--font-caps);
+    font-style: normal;
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 2px;
+  }
+  .verb-flash .hint {
+    color: var(--muted);
+    font-family: var(--font-caps);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    margin-bottom: 6px;
+  }
+
+  .feedback {
+    border-radius: 4px;
+    padding: 12px;
+    margin-top: 12px;
+    text-align: center;
+    font-weight: 700;
+    font-family: var(--font-caps);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    display: none;
+    border: 1px solid transparent;
+  }
+  .feedback.correct {
+    background: rgba(201,169,97,0.1);
+    color: var(--gold-bright);
+    border-color: var(--gold-deep);
+    display: block;
+  }
+  .feedback.wrong {
+    background: rgba(139,42,42,0.15);
+    color: #E5A0A0;
+    border-color: var(--red);
+    display: block;
+  }
+  .feedback .answer {
+    font-weight: 400;
+    font-style: italic;
+    margin-top: 6px;
+    font-size: 0.85rem;
+    text-transform: none;
+    letter-spacing: 0;
+    font-family: var(--font-italic);
+    color: var(--cream-dim);
+  }
+
+  /* Mode 3: conjugations */
+  .infinitive-card { text-align: center; padding: 24px 18px; }
+  .infinitive-card .infinitive {
+    font-family: var(--font-italic);
+    font-style: italic;
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin: 4px 0;
+    text-shadow: 0 2px 16px rgba(201,169,97,0.2);
+  }
+  .infinitive-card .meaning {
+    color: var(--cream-dim);
+    font-style: italic;
+    font-family: var(--font-italic);
+    font-size: 0.95rem;
+    margin-bottom: 14px;
+  }
+  .infinitive-card .sub-line {
+    color: var(--muted);
+    font-family: var(--font-caps);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    margin-bottom: 4px;
+  }
+
+  /* Mode 3 sub-mode toggle */
+  .mode3-toggle {
+    display: flex;
+    gap: 6px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px;
+    margin-bottom: 14px;
+  }
+  .mode3-toggle button {
+    flex: 1;
+    padding: 10px 8px;
+    background: transparent;
+    color: var(--cream-dim);
+    border: none;
+    border-radius: 4px;
+    font-family: var(--font-caps);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mode3-toggle button.active {
+    background: linear-gradient(180deg, var(--gold) 0%, var(--gold-deep) 100%);
+    color: var(--bg-deep);
+  }
+
+  .conjug-table { margin-top: 14px; }
+  .conjug-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 8px;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .conjug-row .pronoun {
+    font-family: var(--font-caps);
+    font-weight: 600;
+    color: var(--cream-dim);
+    min-width: 90px;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: lowercase;
+  }
+  .conjug-row .conj {
+    flex: 1;
+    font-family: var(--font-italic);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--gold-bright);
+  }
+  .conjug-row.highlight {
+    background: rgba(201,169,97,0.08);
+    border-color: var(--gold);
+    box-shadow: 0 0 0 1px var(--gold);
+  }
+  .conjug-row.testme-correct { border-color: var(--gold); background: rgba(201,169,97,0.06); }
+  .conjug-row.testme-wrong { border-color: var(--red-bright); background: rgba(139,42,42,0.08); }
+  .conjug-row.testme-wrong .conj { color: var(--red-bright); }
+  .conjug-row.testme-wrong .conj .correct {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--gold);
+    font-style: italic;
+    margin-top: 2px;
+  }
+  .conjug-row input.test-input {
+    flex: 1;
+    padding: 8px 10px;
+    font-size: 16px;
+    font-family: var(--font-italic);
+    font-style: italic;
+    background: rgba(10,8,6,0.5);
+    border: 1px solid var(--border-bright);
+    border-radius: 3px;
+    color: var(--cream);
+  }
+  .conjug-row input.test-input:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: rgba(10,8,6,0.7);
+  }
+
+  .play-icon-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold-deep);
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .play-icon-btn:active { background: rgba(201,169,97,0.2); }
+
+  .hidden { display: none !important; }
+
+  .progress-bar {
+    height: 4px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-deep), var(--gold-bright));
+    border-radius: 999px;
+    transition: width 0.3s ease;
+  }
+
+  .end-screen { text-align: center; padding: 28px 18px; }
+  .end-screen .emoji { font-size: 3.2rem; margin-bottom: 10px; }
+  .end-screen h2 {
+    font-family: var(--font-caps);
+    color: var(--gold);
+    margin: 0 0 8px;
+    letter-spacing: 0.08em;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+  }
+  .end-screen p { color: var(--cream-dim); font-style: italic; }
+
+  /* Verbos a repasar */
+  .review-list {
+    margin-top: 18px;
+    text-align: left;
+  }
+  .review-list .review-title {
+    font-family: var(--font-caps);
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.7rem;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .review-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(61,47,34,0.4);
+    font-size: 0.92rem;
+  }
+  .review-row:last-child { border-bottom: none; }
+  .review-row .form {
+    font-family: var(--font-italic);
+    font-style: italic;
+    font-weight: 700;
+    color: var(--gold-bright);
+    min-width: 100px;
+  }
+  .review-row .arrow { color: var(--gold-deep); }
+  .review-row .meaning { color: var(--cream); flex: 1; }
+
+  /* Voice / theme settings */
+  .voice-card, .theme-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+  }
+  .voice-card .label, .theme-card .label {
+    font-family: var(--font-caps);
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 8px;
+  }
+  .voice-row { display: flex; gap: 8px; align-items: center; }
+  .voice-select, .theme-select {
+    flex: 1;
+    padding: 9px 10px;
+    border: 1px solid var(--border-bright);
+    border-radius: 4px;
+    font-size: 0.88rem;
+    font-family: var(--font-italic);
+    background: var(--bg-deep);
+    color: var(--cream);
+    min-width: 0;
+  }
+  .voice-select:focus, .theme-select:focus { outline: none; border-color: var(--gold); }
+  .voice-test {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold-deep);
+    border-radius: 4px;
+    padding: 9px 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: var(--font-caps);
+    flex-shrink: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .voice-test:active { background: rgba(201,169,97,0.1); }
+  .voice-warning {
+    background: rgba(139,42,42,0.12);
+    border-left: 3px solid var(--red-bright);
+    border-radius: 4px;
+    padding: 9px 12px;
+    font-size: 0.82rem;
+    color: #E5C0C0;
+    margin-top: 10px;
+    font-style: italic;
+    font-family: var(--font-italic);
+  }
+  .voice-warning strong { color: var(--gold-bright); font-style: normal; font-family: var(--font-caps); letter-spacing: 0.05em; }
+
+  .footnote {
+    text-align: center;
+    color: var(--muted);
+    font-family: var(--font-italic);
+    font-style: italic;
+    font-size: 0.78rem;
+    margin-top: 24px;
+  }
+
+  /* Tap to start overlay (for iOS audio gesture) */
+  .tap-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(5,4,2,0.92);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .tap-overlay .inner {
+    text-align: center;
+    padding: 20px;
+  }
+  .tap-overlay .inner h2 {
+    font-family: var(--font-caps);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+  }
+  .tap-overlay .inner p {
+    color: var(--cream-dim);
+    font-style: italic;
+    font-family: var(--font-italic);
+  }
+
+  /* Small phones */
+  @media (max-width: 420px) {
+    .verb-flash .verb { font-size: 2.4rem; }
+    .infinitive-card .infinitive { font-size: 2.4rem; }
+    .brand h1 { font-size: 1.7rem; }
+    .speaker-btn { width: 96px; height: 96px; font-size: 2.1rem; }
+    .conjug-row { padding: 9px 10px; gap: 8px; }
+    .conjug-row .pronoun { min-width: 70px; font-size: 0.7rem; }
+    .conjug-row .conj { font-size: 1.05rem; }
+    .play-icon-btn { width: 32px; height: 32px; font-size: 0.75rem; }
+    .score-item .num { font-size: 1.2rem; }
+    .end-screen .emoji { font-size: 2.6rem; }
+    .end-screen h2 { font-size: 1.2rem; }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .speaker-btn.playing { animation: none; }
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ============ HOME ============ -->
+  <section id="screen-home">
+    <div class="brand">
+      <div class="overline">— El Padrino del —</div>
+      <h1>Pretérito</h1>
+      <div class="tagline">"An offer you can't refuse."</div>
+      <div class="rule"></div>
+    </div>
+
+    <div class="voice-card">
+      <div class="label">Voce Spagnola · Spanish voice</div>
+      <div class="voice-row">
+        <select id="voice-select" class="voice-select" onchange="onVoiceChange()"></select>
+        <button class="voice-test" onclick="testVoice()">▶ Test</button>
+      </div>
+      <div id="voice-warning" class="voice-warning hidden"></div>
+    </div>
+
+    <div class="theme-card">
+      <div class="label">📖 Sentence theme · Mode 1</div>
+      <select id="theme-select" class="theme-select" onchange="onThemeChange()">
+        <option value="escape_cubano_story">Story Mode — El Escape Cubano (48 sentences)</option>
+        <option value="all">Mixed — all sentences (96)</option>
+      </select>
+    </div>
+
+    <button type="button" class="mode-card m1" data-mode="mode1">
+      <div class="row">
+        <div class="icon">🎧</div>
+        <div>
+          <div class="num">— I —</div>
+          <div class="title">Escuchar</div>
+          <div class="desc"><em>The whisper.</em> Listen. Translate.</div>
+        </div>
+      </div>
+    </button>
+
+    <button type="button" class="mode-card m2" data-mode="mode2">
+      <div class="row">
+        <div class="icon">🎯</div>
+        <div>
+          <div class="num">— II —</div>
+          <div class="title">Verb Review</div>
+          <div class="desc"><em>The interrogation.</em> 80 conjugated verbs. Missed ones come back.</div>
+        </div>
+      </div>
+    </button>
+
+    <button type="button" class="mode-card m3" data-mode="mode3">
+      <div class="row">
+        <div class="icon">📜</div>
+        <div>
+          <div class="num">— III —</div>
+          <div class="title">Conjugations</div>
+          <div class="desc"><em>The code.</em> Recite, then reveal & hear. Or test yourself.</div>
+        </div>
+      </div>
+    </button>
+
+    <p class="footnote" id="js-version">For Micah · loading… · Offline</p>
+    <div id="js-error" style="display:none; background:#6B1818; color:#fff; padding:12px; border-radius:4px; font-family:monospace; font-size:0.75rem; word-break:break-all; margin-top:12px;"></div>
+  </section>
+
+  <!-- ============ MODE 1: LISTENING ============ -->
+  <section id="screen-mode1" class="hidden">
+    <header class="page-header">
+      <button class="back-btn" onclick="goto('home')">← Back</button>
+      <h1>I · Escuchar</h1>
+    </header>
+
+    <div class="progress-bar"><div class="fill" id="m1-progress" style="width:0%"></div></div>
+
+    <div class="card listen-card" id="m1-play-card">
+      <div style="font-family: var(--font-caps); font-size:0.65rem; text-transform:uppercase; letter-spacing:0.2em; color:var(--muted);">
+        <span id="m1-counter">1 / 1</span>
+      </div>
+      <button class="speaker-btn" id="m1-speaker" onclick="m1Play()">🔊</button>
+      <div>
+        <button class="replay-btn" onclick="m1Play()">↻ Replay</button>
+      </div>
+      <textarea id="m1-input" rows="3" placeholder="Type the English translation..."></textarea>
+      <div class="btn-row" style="margin-top:14px;">
+        <button class="btn btn-secondary" onclick="m1Reveal()">Reveal</button>
+        <button class="btn" onclick="m1Next()">Next →</button>
+      </div>
+      <div id="m1-reveal" class="reveal-box hidden">
+        <div class="es" id="m1-es"></div>
+        <div class="en" id="m1-en"></div>
+        <span class="verb-tag" id="m1-tag"></span>
+      </div>
+    </div>
+
+    <div class="card end-screen hidden" id="m1-end">
+      <div class="emoji">🥃</div>
+      <h2>Done.</h2>
+      <p id="m1-end-msg"></p>
+      <button class="btn btn-secondary" onclick="m1Restart()">Run it again</button>
+      <button class="btn btn-ghost" onclick="goto('home')" style="margin-top:8px;">Back to menu</button>
+    </div>
+  </section>
+
+  <!-- ============ MODE 2: VERB REVIEW ============ -->
+  <section id="screen-mode2" class="hidden">
+    <header class="page-header">
+      <button class="back-btn" onclick="goto('home')">← Back</button>
+      <h1>II · Verb Review</h1>
+    </header>
+
+    <div id="m2-round-pill" class="round-pill hidden">Round 1</div>
+
+    <div class="scoreboard">
+      <div class="score-item correct"><div class="num" id="m2-correct">0</div><div class="label">Correct</div></div>
+      <div class="score-item wrong"><div class="num" id="m2-wrong">0</div><div class="label">Missed</div></div>
+      <div class="score-item remaining"><div class="num" id="m2-remaining">80</div><div class="label">Left</div></div>
+    </div>
+
+    <div class="card verb-flash" id="m2-card">
+      <div class="hint">What does this mean in English?</div>
+      <div class="verb" id="m2-verb">—</div>
+      <div class="ctx hidden" id="m2-ctx"><span class="label">Context</span><span id="m2-ctx-text"></span></div>
+      <input type="text" id="m2-input" placeholder="response here" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
+      <div class="btn-row" style="margin-top:14px;">
+        <button class="btn" onclick="m2Submit()">Check</button>
+      </div>
+      <div class="feedback" id="m2-feedback"></div>
+    </div>
+
+    <div class="card end-screen hidden" id="m2-round-end">
+      <div class="emoji">🔁</div>
+      <h2 id="m2-round-title">Round Done</h2>
+      <p id="m2-round-msg"></p>
+      <button class="btn" onclick="m2NextRound()">Settle the missed verbs</button>
+    </div>
+
+    <div class="card end-screen hidden" id="m2-end">
+      <div class="emoji">🥃</div>
+      <h2>It's Done.</h2>
+      <p id="m2-end-msg"></p>
+      <div class="review-list hidden" id="m2-review">
+        <div class="review-title">Verbos a repasar — review these</div>
+        <div id="m2-review-rows"></div>
+      </div>
+      <div class="btn-row" style="margin-top:18px;">
+        <button class="btn btn-secondary" onclick="m2Restart()">Run it again</button>
+        <button class="btn btn-ghost" onclick="goto('home')">Back to menu</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MODE 3: CONJUGATIONS ============ -->
+  <section id="screen-mode3" class="hidden">
+    <header class="page-header">
+      <button class="back-btn" onclick="goto('home')">← Back</button>
+      <h1>III · Conjugations</h1>
+    </header>
+
+    <div class="mode3-toggle">
+      <button id="m3-tab-reveal" class="active" onclick="m3SetMode('reveal')">📜 Reveal</button>
+      <button id="m3-tab-test" onclick="m3SetMode('test')">🎯 Test Me</button>
+    </div>
+
+    <div class="card infinitive-card">
+      <div class="sub-line">— Infinitive · <span id="m3-counter">1 / 16</span> —</div>
+      <div class="infinitive" id="m3-verb">—</div>
+      <div class="meaning" id="m3-meaning">—</div>
+      <button class="btn" onclick="m3Reveal()" id="m3-reveal-btn">Reveal & hear</button>
+    </div>
+
+    <!-- Reveal sub-mode -->
+    <div id="m3-table" class="conjug-table hidden"></div>
+    <div class="btn-row hidden" id="m3-actions" style="margin-top:14px;">
+      <button class="btn btn-secondary" onclick="m3PlayAll()">▶ Play all</button>
+      <button class="btn btn-ghost" onclick="m3Next()">Next →</button>
+    </div>
+
+    <!-- Test Me sub-mode -->
+    <div id="m3-test-form" class="conjug-table hidden"></div>
+    <div class="btn-row hidden" id="m3-test-actions" style="margin-top:14px;">
+      <button class="btn" onclick="m3CheckAll()">Check all</button>
+    </div>
+    <div class="feedback hidden" id="m3-test-feedback" style="margin-top:14px;"></div>
+    <div class="btn-row hidden" id="m3-test-after" style="margin-top:14px;">
+      <button class="btn btn-secondary" onclick="m3PlayAll()">▶ Hear them</button>
+      <button class="btn btn-ghost" onclick="m3Next()">Next →</button>
+    </div>
+  </section>
+
+</div>
+
+<script type="application/json" id="game-data">{"sentences":[{"es":"Miguel vivió en Cuba muchos años.","en":"Miguel lived in Cuba for many years.","verb":"vivir","theme":"escape_cubano"},{"es":"Yo viví en la playa el verano pasado.","en":"I lived at the beach last summer.","verb":"vivir","theme":"daily_life"},{"es":"Don Vito vivió en Sicilia con su familia.","en":"Don Vito lived in Sicily with his family.","verb":"vivir","theme":"godfather"},{"es":"El padre agarró el brazo de su hermano.","en":"The father grabbed his brother's arm.","verb":"agarrar","theme":"escape_cubano"},{"es":"Yo agarré la manzana inmediatamente.","en":"I grabbed the apple immediately.","verb":"agarrar","theme":"neutral"},{"es":"Ella agarró la balsa antes del ataque.","en":"She grabbed the raft before the attack.","verb":"agarrar","theme":"escape_cubano"},{"es":"Fabio vomitó cuando la balsa se movió.","en":"Fabio vomited when the raft moved.","verb":"vomitar","theme":"escape_cubano"},{"es":"El chico vomitó después de la cena.","en":"The boy vomited after dinner.","verb":"vomitar","theme":"neutral"},{"es":"Yo vomité en el agua.","en":"I vomited in the water.","verb":"vomitar","theme":"neutral"},{"es":"El tiburón atacó la balsa.","en":"The shark attacked the raft.","verb":"atacar","theme":"escape_cubano"},{"es":"El tiburón atacó a Miguel.","en":"The shark attacked Miguel.","verb":"atacar","theme":"escape_cubano"},{"es":"Los enemigos atacaron al padrino.","en":"The enemies attacked the godfather.","verb":"atacar","theme":"godfather"},{"es":"Don Vito viajó a Sicilia con su familia.","en":"Don Vito traveled to Sicily with his family.","verb":"viajar","theme":"godfather"},{"es":"Bernard viajó a Turquía.","en":"Bernard traveled to Turkey.","verb":"viajar","theme":"neutral"},{"es":"Nosotros viajamos a la playa.","en":"We traveled to the beach.","verb":"viajar","theme":"daily_life"},{"es":"Yo compré un cannoli en la calle.","en":"I bought a cannoli on the street.","verb":"comprar","theme":"godfather"},{"es":"Bernard compró tres tipos de manzanas.","en":"Bernard bought three types of apples.","verb":"comprar","theme":"neutral"},{"es":"Ella compró una manzana verde.","en":"She bought a green apple.","verb":"comprar","theme":"neutral"},{"es":"Yo llegué a la playa a las dos.","en":"I arrived at the beach at two.","verb":"llegar","theme":"daily_life"},{"es":"El padre llegó tarde a la cena.","en":"The father arrived late to dinner.","verb":"llegar","theme":"neutral"},{"es":"Ellos llegaron a Florida.","en":"They arrived in Florida.","verb":"llegar","theme":"escape_cubano"},{"es":"Michael regresó a Nueva York.","en":"Michael returned to New York.","verb":"regresar","theme":"godfather"},{"es":"Bernard regresó a su casa con las manzanas.","en":"Bernard returned home with the apples.","verb":"regresar","theme":"neutral"},{"es":"Yo regresé a la escuela.","en":"I returned to school.","verb":"regresar","theme":"daily_life"},{"es":"Rita se duchó antes de la cena.","en":"Rita showered before dinner.","verb":"ducharse","theme":"daily_life"},{"es":"Nosotros nos duchamos después del partido.","en":"We showered after the game.","verb":"ducharse","theme":"daily_life"},{"es":"Yo me duché inmediatamente.","en":"I showered immediately.","verb":"ducharse","theme":"daily_life"},{"es":"Rita se levantó muy tarde.","en":"Rita got up very late.","verb":"levantarse","theme":"daily_life"},{"es":"Yo me levanté inmediatamente.","en":"I got up immediately.","verb":"levantarse","theme":"daily_life"},{"es":"Ellos se levantaron antes de la cena.","en":"They got up before dinner.","verb":"levantarse","theme":"daily_life"},{"es":"La balsa se movió constantemente.","en":"The raft moved constantly.","verb":"moverse","theme":"escape_cubano"},{"es":"El tiburón se movió muy rápido.","en":"The shark moved very fast.","verb":"moverse","theme":"escape_cubano"},{"es":"Yo me moví hacia la playa.","en":"I moved toward the beach.","verb":"moverse","theme":"daily_life"},{"es":"Don Vito fue un hombre importante.","en":"Don Vito was an important man.","verb":"ser","theme":"godfather"},{"es":"Fue un día peligroso.","en":"It was a dangerous day.","verb":"ser","theme":"escape_cubano"},{"es":"Miguel fue mi mejor amigo.","en":"Miguel was my best friend.","verb":"ser","theme":"neutral"},{"es":"Rita fue al parque con sus amigos.","en":"Rita went to the park with her friends.","verb":"ir","theme":"daily_life"},{"es":"Yo fui a la escuela.","en":"I went to school.","verb":"ir","theme":"daily_life"},{"es":"Ellos fueron al partido de fútbol.","en":"They went to the soccer game.","verb":"ir","theme":"daily_life"},{"es":"El chico vio el tiburón en el agua.","en":"The boy saw the shark in the water.","verb":"ver","theme":"escape_cubano"},{"es":"Yo vi una ola grande.","en":"I saw a big wave.","verb":"ver","theme":"escape_cubano"},{"es":"Nosotros vimos Florida desde la balsa.","en":"We saw Florida from the raft.","verb":"ver","theme":"escape_cubano"},{"es":"Ellos hicieron una promesa.","en":"They made a promise.","verb":"hacer","theme":"godfather"},{"es":"Yo hice mi tarea antes de la cena.","en":"I did my homework before dinner.","verb":"hacer","theme":"daily_life"},{"es":"Don Vito hizo una oferta peligrosa.","en":"Don Vito made a dangerous offer.","verb":"hacer","theme":"godfather"},{"es":"Yo tuve un día peligroso.","en":"I had a dangerous day.","verb":"tener","theme":"neutral"},{"es":"El padre tuvo miedo del tiburón.","en":"The father was afraid of the shark.","verb":"tener","theme":"escape_cubano"},{"es":"Nosotros tuvimos mucha lluvia.","en":"We had a lot of rain.","verb":"tener","theme":"neutral"},{"es":"Miguel y su familia vivieron en Cuba.","en":"Miguel and his family lived in Cuba.","verb":"vivir","theme":"escape_cubano_story"},{"es":"Ellos vivieron en Cuba antes del escape.","en":"They lived in Cuba before the escape.","verb":"vivir","theme":"escape_cubano_story"},{"es":"Yo viví en Cuba toda mi vida.","en":"I lived in Cuba all my life.","verb":"vivir","theme":"escape_cubano_story"},{"es":"El padre agarró los brazos de Miguel después del ataque.","en":"The father grabbed Miguel's arms after the attack.","verb":"agarrar","theme":"escape_cubano_story"},{"es":"Miguel agarró la balsa cuando el tiburón atacó.","en":"Miguel grabbed the raft when the shark attacked.","verb":"agarrar","theme":"escape_cubano_story"},{"es":"Su papá agarró a Miguel inmediatamente.","en":"His dad grabbed Miguel immediately.","verb":"agarrar","theme":"escape_cubano_story"},{"es":"Un chico vomitó en la balsa cuando el tiburón atacó.","en":"A boy vomited on the raft when the shark attacked.","verb":"vomitar","theme":"escape_cubano_story"},{"es":"Él vomitó después del ataque del tiburón.","en":"He vomited after the shark attack.","verb":"vomitar","theme":"escape_cubano_story"},{"es":"Yo vomité durante el viaje peligroso.","en":"I vomited during the dangerous trip.","verb":"vomitar","theme":"escape_cubano_story"},{"es":"El tiburón atacó a Miguel y la balsa.","en":"The shark attacked Miguel and the raft.","verb":"atacar","theme":"escape_cubano_story"},{"es":"Un tiburón grande atacó a la familia.","en":"A big shark attacked the family.","verb":"atacar","theme":"escape_cubano_story"},{"es":"El tiburón atacó la balsa peligrosamente.","en":"The shark attacked the raft dangerously.","verb":"atacar","theme":"escape_cubano_story"},{"es":"La familia viajó en balsa por cuatro días.","en":"The family traveled by raft for four days.","verb":"viajar","theme":"escape_cubano_story"},{"es":"Ellos viajaron de Cuba a Florida.","en":"They traveled from Cuba to Florida.","verb":"viajar","theme":"escape_cubano_story"},{"es":"Miguel viajó con su familia en la balsa.","en":"Miguel traveled with his family on the raft.","verb":"viajar","theme":"escape_cubano_story"},{"es":"La familia compró una balsa para escapar.","en":"The family bought a raft to escape.","verb":"comprar","theme":"escape_cubano_story"},{"es":"Ellos compraron una balsa ilegal en Cuba.","en":"They bought an illegal raft in Cuba.","verb":"comprar","theme":"escape_cubano_story"},{"es":"Miguel compró agua para el viaje.","en":"Miguel bought water for the trip.","verb":"comprar","theme":"escape_cubano_story"},{"es":"La balsa llegó al océano peligroso.","en":"The raft arrived at the dangerous ocean.","verb":"llegar","theme":"escape_cubano_story"},{"es":"Miguel llegó a la balsa con su familia.","en":"Miguel arrived at the raft with his family.","verb":"llegar","theme":"escape_cubano_story"},{"es":"La lluvia llegó durante el viaje.","en":"The rain came during the trip.","verb":"llegar","theme":"escape_cubano_story"},{"es":"Miguel regresó con su familia después del ataque.","en":"Miguel returned with his family after the attack.","verb":"regresar","theme":"escape_cubano_story"},{"es":"La familia no regresó a Cuba.","en":"The family did not return to Cuba.","verb":"regresar","theme":"escape_cubano_story"},{"es":"Yo no regresé a mi casa en Cuba.","en":"I did not return to my home in Cuba.","verb":"regresar","theme":"escape_cubano_story"},{"es":"Miguel se duchó antes del viaje.","en":"Miguel showered before the trip.","verb":"ducharse","theme":"escape_cubano_story"},{"es":"La familia se duchó antes del escape.","en":"The family showered before the escape.","verb":"ducharse","theme":"escape_cubano_story"},{"es":"Yo me duché antes del viaje peligroso.","en":"I showered before the dangerous trip.","verb":"ducharse","theme":"escape_cubano_story"},{"es":"Miguel se levantó inmediatamente cuando vio el tiburón.","en":"Miguel got up immediately when he saw the shark.","verb":"levantarse","theme":"escape_cubano_story"},{"es":"La familia se levantó antes del viaje.","en":"The family got up before the trip.","verb":"levantarse","theme":"escape_cubano_story"},{"es":"Yo me levanté cuando el tiburón atacó.","en":"I got up when the shark attacked.","verb":"levantarse","theme":"escape_cubano_story"},{"es":"La balsa se movió constantemente en el agua.","en":"The raft moved constantly in the water.","verb":"moverse","theme":"escape_cubano_story"},{"es":"El tiburón se movió rápido en el agua.","en":"The shark moved fast in the water.","verb":"moverse","theme":"escape_cubano_story"},{"es":"Miguel se movió cuando el tiburón llegó.","en":"Miguel moved when the shark arrived.","verb":"moverse","theme":"escape_cubano_story"},{"es":"Fue ilegal tener una balsa en Cuba en 2016.","en":"It was illegal to have a raft in Cuba in 2016.","verb":"ser","theme":"escape_cubano_story"},{"es":"Fue un viaje muy peligroso para la familia.","en":"It was a very dangerous trip for the family.","verb":"ser","theme":"escape_cubano_story"},{"es":"El tiburón fue un problema grande.","en":"The shark was a big problem.","verb":"ser","theme":"escape_cubano_story"},{"es":"La familia fue de Cuba a Florida.","en":"The family went from Cuba to Florida.","verb":"ir","theme":"escape_cubano_story"},{"es":"Ellos fueron al agua peligrosa.","en":"They went to the dangerous water.","verb":"ir","theme":"escape_cubano_story"},{"es":"Miguel fue con su familia en la balsa.","en":"Miguel went with his family on the raft.","verb":"ir","theme":"escape_cubano_story"},{"es":"Rita no vio Florida.","en":"Rita did not see Florida.","verb":"ver","theme":"escape_cubano_story"},{"es":"Miguel vio el tiburón en el agua.","en":"Miguel saw the shark in the water.","verb":"ver","theme":"escape_cubano_story"},{"es":"La familia vio olas muy grandes.","en":"The family saw very big waves.","verb":"ver","theme":"escape_cubano_story"},{"es":"La familia hizo planes para escapar.","en":"The family made plans to escape.","verb":"hacer","theme":"escape_cubano_story"},{"es":"Miguel hizo el viaje con su familia.","en":"Miguel made the trip with his family.","verb":"hacer","theme":"escape_cubano_story"},{"es":"Ellos hicieron una decisión peligrosa.","en":"They made a dangerous decision.","verb":"hacer","theme":"escape_cubano_story"},{"es":"La familia tuvo una balsa ilegal.","en":"The family had an illegal raft.","verb":"tener","theme":"escape_cubano_story"},{"es":"Miguel tuvo problemas con el tiburón.","en":"Miguel had problems with the shark.","verb":"tener","theme":"escape_cubano_story"},{"es":"Ellos tuvieron lluvia y olas grandes.","en":"They had rain and big waves.","verb":"tener","theme":"escape_cubano_story"}],"verbs":[{"form":"viví","inf":"vivir","pronoun":"yo","ctx":null,"primary":"I lived","answers":["i lived","lived"]},{"form":"viviste","inf":"vivir","pronoun":"tú","ctx":null,"primary":"you lived","answers":["you lived","lived"]},{"form":"vivió","inf":"vivir","pronoun":"él / ella / ud.","ctx":null,"primary":"he lived","answers":["he lived","lived","she lived","you lived"]},{"form":"vivimos","inf":"vivir","pronoun":"nosotros","ctx":null,"primary":"we lived","answers":["we lived","lived"]},{"form":"vivieron","inf":"vivir","pronoun":"ellos / ellas / uds.","ctx":null,"primary":"they lived","answers":["they lived","lived","you all lived"]},{"form":"agarré","inf":"agarrar","pronoun":"yo","ctx":null,"primary":"I grabbed","answers":["i grabbed","grabbed","grasped","i grasped"]},{"form":"agarraste","inf":"agarrar","pronoun":"tú","ctx":null,"primary":"you grabbed","answers":["you grabbed","grabbed","grasped","you grasped"]},{"form":"agarró","inf":"agarrar","pronoun":"él / ella / ud.","ctx":null,"primary":"he grabbed","answers":["he grabbed","grabbed","she grabbed","you grabbed","grasped","he grasped","she grasped","you grasped"]},{"form":"agarramos","inf":"agarrar","pronoun":"nosotros","ctx":null,"primary":"we grabbed","answers":["we grabbed","grabbed","grasped","we grasped"]},{"form":"agarraron","inf":"agarrar","pronoun":"ellos / ellas / uds.","ctx":null,"primary":"they grabbed","answers":["they grabbed","grabbed","you all grabbed","grasped","they grasped","you all grasped"]},{"form":"vomité","inf":"vomitar","pronoun":"yo","ctx":null,"primary":"I vomited","answers":["i vomited","vomited","threw up","i threw up"]},{"form":"vomitaste","inf":"vomitar","pronoun":"tú","ctx":null,"primary":"you vomited","answers":["you vomited","vomited","threw up","you threw up"]},{"form":"vomitó","inf":"vomitar","pronoun":"él / ella / ud.","ctx":null,"primary":"he vomited","answers":["he vomited","vomited","she vomited","you vomited","threw up","he threw up","she threw up","you threw up"]},{"form":"vomitamos","inf":"vomitar","pronoun":"nosotros","ctx":null,"primary":"we vomited","answers":["we vomited","vomited","threw up","we threw up"]},{"form":"vomitaron","inf":"vomitar","pronoun":"ellos / ellas / uds.","ctx":null,"primary":"they vomited","answers":["they vomited","vomited","you all vomited","threw up","they threw up","you all threw up"]},{"form":"ataqué","inf":"atacar","pronoun":"yo","ctx":null,"primary":"I attacked","answers":["i attacked","attacked"]},{"form":"atacaste","inf":"atacar","pronoun":"tú","ctx":null,"primary":"you attacked","answers":["you attacked","attacked"]},{"form":"atacó","inf":"atacar","pronoun":"él / ella / ud.","ctx":null,"primary":"he attacked","answers":["he attacked","attacked","she attacked","you attacked"]},{"form":"atacamos","inf":"atacar","pronoun":"nosotros","ctx":null,"primary":"we attacked","answers":["we attacked","attacked"]},{"form":"atacaron","inf":"atacar","pronoun":"ellos / ellas / uds.","ctx":null,"primary":"they attacked","answers":["they attacked","attacked","you all attacked"]},{"form":"viajé","inf":"viajar","pronoun":"yo","ctx":null,"primary":"I traveled","answers":["i traveled","traveled","travelled","i travelled"]},{"form":"viajaste","inf":"viajar","pronoun":"tú","ctx":null,"primary":"you traveled","answers":["you traveled","traveled","travelled","you travelled"]},{"form":"viajó","inf":"viajar","pronoun":"él / ella / ud.","ctx":null,"primary":"he traveled","answers":["he traveled","traveled","she traveled","you traveled","travelled","he travelled","she travelled","you travelled"]},{"form":"viajamos","inf":"viajar","pronoun":"nosotros","ctx":null,"primary":"we traveled","answers":["we traveled","traveled","travelled","we travelled"]},{"form":"viajaron","inf":"viajar","pronoun":"ellos / ellas / uds.","ctx":null,"primary":"they traveled","answers":["they traveled","traveled","you all traveled","travelled","they travelled","you all travelled"]},{"form":"compré","inf":"comprar","pronoun":"yo","ctx":null,"primary":"I bought","answers":["i bought","bought"]},{"form":"compraste","inf":"comprar","pronoun":"tú","ctx":null,"primary":"you bought","answers":["you bought","bought"]},{"form":"compró","inf":"comprar","pronoun":"él / ella / ud.","ctx":null,"primary":"he bought","answers":["he bought","bought","she bought","you bought"]},{"form":"compramos","inf":"comprar","pronoun":"nosotros","ctx":null,"primary":"we bought","answers":["we bought","bought"]},{"form":"compraron","inf":"comprar","pronoun":"ellos / ellas / uds.","ctx":null,"primary":"they bought","answers":["they bought","bought","you all bought"]},{"form":"llegué","inf":"llegar","pronoun":"yo","ctx":null,"primary":"I arrived","answers":["i arrived","arrived"]},{"form":"llegaste","inf":"llegar","pronoun":"tú","ctx":null,"primary":"you arrived","answers":["you arrived","arrived"]},{"form":"llegó","inf":"llegar","pronoun":"él / ella / ud.","ctx":null,"primary":"he arrived","answers":["he arrived","arrived","she arrived","you arrived"]},{"form":"llegamos","inf":"llegar","pronoun":"nosotros","ctx":null,"primary":"we arrived","answers":["we arrived","arrived"]},{"form":"llegaron","inf":"llegar","pronoun":"ellos / ellas / uds.","ctx":null,"primary":"they arrived","answers":["they arrived","arrived","you all arrived"]},{"form":"regresé","inf":"regresar","pronoun":"yo","ctx":null,"primary":"I returned","answers":["i returned","returned","went back","i went back"]},{"form":"regresaste","inf":"regresar","pronoun":"tú","ctx":null,"primary":"you returned","answers":["you returned","returned","went back","you went back"]},{"form":"regresó","inf":"regresar","pronoun":"él / ella / ud.","ctx":null,"primary":"he returned","answers":["he returned","returned","she returned","you returned","went back","he went back","she went back","you went back"]},{"form":"regresamos","inf":"regresar","pronoun":"nosotros","ctx":null,"primary":"we returned","answers":["we returned","returned","went back","we went back"]},{"form":"regresaron","inf":"regresar","pronoun":"ellos / ellas / uds.","ctx":null,"primary":"they returned","answers":["they returned","returned","you all returned","went back","they went back","you all went back"]},{"form":"me duché","inf":"ducharse","pronoun":"yo","ctx":null,"primary":"I showered","answers":["i showered","showered","took a shower","i took a shower"]},{"form":"te duchaste","inf":"ducharse","pronoun":"tú","ctx":null,"primary":"you showered","answers":["you showered","showered","took a shower","you took a shower"]},{"form":"se duchó","inf":"ducharse","pronoun":"él / ella / ud.","ctx":null,"primary":"he showered","answers":["he showered","showered","she showered","you showered","took a shower","he took a shower","she took a shower","you took a shower"]},{"form":"nos duchamos","inf":"ducharse","pronoun":"nosotros","ctx":null,"primary":"we showered","answers":["we showered","showered","took a shower","we took a shower"]},{"form":"se ducharon","inf":"ducharse","pronoun":"ellos / ellas / uds.","ctx":null,"primary":"they showered","answers":["they showered","showered","you all showered","took a shower","they took a shower","you all took a shower"]},{"form":"me levanté","inf":"levantarse","pronoun":"yo","ctx":null,"primary":"I got up","answers":["i got up","got up"]},{"form":"te levantaste","inf":"levantarse","pronoun":"tú","ctx":null,"primary":"you got up","answers":["you got up","got up"]},{"form":"se levantó","inf":"levantarse","pronoun":"él / ella / ud.","ctx":null,"primary":"he got up","answers":["he got up","got up","she got up","you got up"]},{"form":"nos levantamos","inf":"levantarse","pronoun":"nosotros","ctx":null,"primary":"we got up","answers":["we got up","got up"]},{"form":"se levantaron","inf":"levantarse","pronoun":"ellos / ellas / uds.","ctx":null,"primary":"they got up","answers":["they got up","got up","you all got up"]},{"form":"me moví","inf":"moverse","pronoun":"yo","ctx":null,"primary":"I moved","answers":["i moved","moved"]},{"form":"te moviste","inf":"moverse","pronoun":"tú","ctx":null,"primary":"you moved","answers":["you moved","moved"]},{"form":"se movió","inf":"moverse","pronoun":"él / ella / ud.","ctx":null,"primary":"he moved","answers":["he moved","moved","she moved","you moved"]},{"form":"nos movimos","inf":"moverse","pronoun":"nosotros","ctx":null,"primary":"we moved","answers":["we moved","moved"]},{"form":"se movieron","inf":"moverse","pronoun":"ellos / ellas / uds.","ctx":null,"primary":"they moved","answers":["they moved","moved","you all moved"]},{"form":"vi","inf":"ver","pronoun":"yo","ctx":null,"primary":"I saw","answers":["i saw","saw"]},{"form":"viste","inf":"ver","pronoun":"tú","ctx":null,"primary":"you saw","answers":["you saw","saw"]},{"form":"vio","inf":"ver","pronoun":"él / ella / ud.","ctx":null,"primary":"he saw","answers":["he saw","saw","she saw","you saw"]},{"form":"vimos","inf":"ver","pronoun":"nosotros","ctx":null,"primary":"we saw","answers":["we saw","saw"]},{"form":"vieron","inf":"ver","pronoun":"ellos / ellas / uds.","ctx":null,"primary":"they saw","answers":["they saw","saw","you all saw"]},{"form":"hice","inf":"hacer","pronoun":"yo","ctx":null,"primary":"I did","answers":["i did","did","made","i made"]},{"form":"hiciste","inf":"hacer","pronoun":"tú","ctx":null,"primary":"you did","answers":["you did","did","made","you made"]},{"form":"hizo","inf":"hacer","pronoun":"él / ella / ud.","ctx":null,"primary":"he did","answers":["he did","did","she did","you did","made","he made","she made","you made"]},{"form":"hicimos","inf":"hacer","pronoun":"nosotros","ctx":null,"primary":"we did","answers":["we did","did","made","we made"]},{"form":"hicieron","inf":"hacer","pronoun":"ellos / ellas / uds.","ctx":null,"primary":"they did","answers":["they did","did","you all did","made","they made","you all made"]},{"form":"tuve","inf":"tener","pronoun":"yo","ctx":null,"primary":"I had","answers":["i had","had"]},{"form":"tuviste","inf":"tener","pronoun":"tú","ctx":null,"primary":"you had","answers":["you had","had"]},{"form":"tuvo","inf":"tener","pronoun":"él / ella / ud.","ctx":null,"primary":"he had","answers":["he had","had","she had","you had"]},{"form":"tuvimos","inf":"tener","pronoun":"nosotros","ctx":null,"primary":"we had","answers":["we had","had"]},{"form":"tuvieron","inf":"tener","pronoun":"ellos / ellas / uds.","ctx":null,"primary":"they had","answers":["they had","had","you all had"]},{"form":"fui","inf":"ser","pronoun":"yo","ctx":"Yo fui un buen amigo.","primary":"I was","answers":["i was","was"]},{"form":"fuiste","inf":"ser","pronoun":"tú","ctx":"Tú fuiste mi mejor amigo.","primary":"you were","answers":["you were","were"]},{"form":"fue","inf":"ser","pronoun":"él / ella / ud.","ctx":"Don Vito fue un hombre importante.","primary":"he was","answers":["he was","she was","you were","it was","was"]},{"form":"fuimos","inf":"ser","pronoun":"nosotros","ctx":"Nosotros fuimos amigos.","primary":"we were","answers":["we were","were"]},{"form":"fueron","inf":"ser","pronoun":"ellos / ellas / uds.","ctx":"Ellos fueron felices.","primary":"they were","answers":["they were","you all were","were"]},{"form":"fui","inf":"ir","pronoun":"yo","ctx":"Yo fui a la escuela.","primary":"I went","answers":["i went","went"]},{"form":"fuiste","inf":"ir","pronoun":"tú","ctx":"Tú fuiste a la playa.","primary":"you went","answers":["you went","went"]},{"form":"fue","inf":"ir","pronoun":"él / ella / ud.","ctx":"Rita fue al parque.","primary":"she went","answers":["she went","he went","you went","went"]},{"form":"fuimos","inf":"ir","pronoun":"nosotros","ctx":"Nosotros fuimos a Florida.","primary":"we went","answers":["we went","went"]},{"form":"fueron","inf":"ir","pronoun":"ellos / ellas / uds.","ctx":"Ellos fueron al partido.","primary":"they went","answers":["they went","you all went","went"]}],"conjs":[{"inf":"vivir","meaning":"to live","forms":[["yo","viví"],["tú","viviste"],["él / ella","vivió"],["nosotros","vivimos"],["ellos / ellas","vivieron"]]},{"inf":"agarrar","meaning":"to grab","forms":[["yo","agarré"],["tú","agarraste"],["él / ella","agarró"],["nosotros","agarramos"],["ellos / ellas","agarraron"]]},{"inf":"vomitar","meaning":"to vomit","forms":[["yo","vomité"],["tú","vomitaste"],["él / ella","vomitó"],["nosotros","vomitamos"],["ellos / ellas","vomitaron"]]},{"inf":"atacar","meaning":"to attack","forms":[["yo","ataqué"],["tú","atacaste"],["él / ella","atacó"],["nosotros","atacamos"],["ellos / ellas","atacaron"]]},{"inf":"viajar","meaning":"to travel","forms":[["yo","viajé"],["tú","viajaste"],["él / ella","viajó"],["nosotros","viajamos"],["ellos / ellas","viajaron"]]},{"inf":"comprar","meaning":"to buy","forms":[["yo","compré"],["tú","compraste"],["él / ella","compró"],["nosotros","compramos"],["ellos / ellas","compraron"]]},{"inf":"llegar","meaning":"to arrive","forms":[["yo","llegué"],["tú","llegaste"],["él / ella","llegó"],["nosotros","llegamos"],["ellos / ellas","llegaron"]]},{"inf":"regresar","meaning":"to return","forms":[["yo","regresé"],["tú","regresaste"],["él / ella","regresó"],["nosotros","regresamos"],["ellos / ellas","regresaron"]]},{"inf":"ducharse","meaning":"to shower","forms":[["yo","me duché"],["tú","te duchaste"],["él / ella","se duchó"],["nosotros","nos duchamos"],["ellos / ellas","se ducharon"]]},{"inf":"levantarse","meaning":"to get up","forms":[["yo","me levanté"],["tú","te levantaste"],["él / ella","se levantó"],["nosotros","nos levantamos"],["ellos / ellas","se levantaron"]]},{"inf":"moverse","meaning":"to move","forms":[["yo","me moví"],["tú","te moviste"],["él / ella","se movió"],["nosotros","nos movimos"],["ellos / ellas","se movieron"]]},{"inf":"ser","meaning":"to be (permanent)","forms":[["yo","fui"],["tú","fuiste"],["él / ella","fue"],["nosotros","fuimos"],["ellos / ellas","fueron"]]},{"inf":"ir","meaning":"to go","forms":[["yo","fui"],["tú","fuiste"],["él / ella","fue"],["nosotros","fuimos"],["ellos / ellas","fueron"]]},{"inf":"ver","meaning":"to see","forms":[["yo","vi"],["tú","viste"],["él / ella","vio"],["nosotros","vimos"],["ellos / ellas","vieron"]]},{"inf":"hacer","meaning":"to do | to make","forms":[["yo","hice"],["tú","hiciste"],["él / ella","hizo"],["nosotros","hicimos"],["ellos / ellas","hicieron"]]},{"inf":"tener","meaning":"to have","forms":[["yo","tuve"],["tú","tuviste"],["él / ella","tuvo"],["nosotros","tuvimos"],["ellos / ellas","tuvieron"]]}]}</script>
+
+<script>
+  // ---------- Visible diagnostics (so we can debug iPhone issues without a Mac) ----------
+  window.addEventListener('error', function(e) {
+    var box = document.getElementById('js-error');
+    if (box) {
+      box.style.display = 'block';
+      box.textContent = '⚠ JS error: ' + (e.message || e.error || 'unknown') +
+        ' @ ' + (e.filename || '') + ':' + (e.lineno || '') + ':' + (e.colno || '');
+    }
+  });
+
+  // ---------- Load data ----------
+  let DATA, M1_ALL, M2_ALL, M3_ALL;
+  try {
+    DATA = JSON.parse(document.getElementById('game-data').textContent);
+    M1_ALL = DATA.sentences;
+    M2_ALL = DATA.verbs;
+    M3_ALL = DATA.conjs;
+  } catch (err) {
+    var box = document.getElementById('js-error');
+    if (box) {
+      box.style.display = 'block';
+      box.textContent = '⚠ JSON parse failed: ' + err.message;
+    }
+    M1_ALL = []; M2_ALL = []; M3_ALL = [];
+  }
+
+  // ---------- Voice / audio ----------
+  let allVoices = [];
+  let currentVoice = null;
+  let audioUnlocked = false;
+
+  function voiceTier(v) {
+    if (/Online \(Natural\)/i.test(v.name)) return 5;
+    if (/Neural/i.test(v.name)) return 4;
+    if (/Google/i.test(v.name) && /es/i.test(v.lang)) return 3;
+    if (/Mónica|Paulina|Diego|Jorge|Juan|Marisol|Esperanza/i.test(v.name)) return 3;
+    if (/Microsoft.*Sabina|Microsoft.*Helena|Microsoft.*Pablo|Microsoft.*Raul/i.test(v.name)) return 1;
+    return 2;
+  }
+  // Region rank: prefer Mexican Spanish first, then other Latin American, then Spain.
+  function regionRank(v) {
+    if (/es-MX/i.test(v.lang)) return 4;
+    if (/es-US|es-CO|es-AR|es-PE|es-CL|es-VE/i.test(v.lang)) return 3;
+    if (/es-ES/i.test(v.lang)) return 1;
+    if (/^es/i.test(v.lang)) return 2;
+    return 0;
+  }
+  // Region dominates over quality so Mexican voices always sort to the top.
+  function voiceQuality(v) { return regionRank(v) * 100 + voiceTier(v); }
+  function isNaturalVoice(v) { return voiceTier(v) >= 3; }
+  function voiceLabel(v) {
+    const q = voiceQuality(v);
+    const star = q >= 4 ? '★ ' : (q === 3 ? '☆ ' : '');
+    let region = '';
+    if (/es-MX/i.test(v.lang)) region = ' · Mex';
+    else if (/es-ES/i.test(v.lang)) region = ' · Spain';
+    else if (/es-US/i.test(v.lang)) region = ' · US';
+    else if (/es-AR/i.test(v.lang)) region = ' · Arg';
+    else if (/es-CO/i.test(v.lang)) region = ' · Col';
+    else if (/^es/i.test(v.lang)) region = ' · ' + v.lang;
+    let n = v.name.replace(/^Microsoft\s+/i, '')
+      .replace(/\s*Online\s*\(Natural\)\s*-?\s*Spanish.*$/i, ' (Natural)')
+      .replace(/\s*-\s*Spanish.*$/i, '')
+      .replace(/\s*Desktop$/i, '');
+    return `${star}${n}${region}`;
+  }
+  function loadVoices() {
+    if (!('speechSynthesis' in window)) return;
+    const all = window.speechSynthesis.getVoices();
+    allVoices = all.filter(v => v.lang && v.lang.toLowerCase().startsWith('es'))
+      .sort((a,b) => voiceQuality(b) - voiceQuality(a));
+    populateVoicePicker();
+  }
+  function populateVoicePicker() {
+    const sel = document.getElementById('voice-select');
+    if (!sel) return;
+    sel.innerHTML = '';
+    if (allVoices.length === 0) {
+      const opt = document.createElement('option');
+      opt.textContent = 'Loading voices...';
+      sel.appendChild(opt);
+      return;
+    }
+    allVoices.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v.name;
+      opt.textContent = voiceLabel(v);
+      sel.appendChild(opt);
+    });
+    const saved = localStorage.getItem('preferredVoice');
+    const match = saved && allVoices.find(v => v.name === saved);
+    currentVoice = match || allVoices[0];
+    sel.value = currentVoice.name;
+    const warn = document.getElementById('voice-warning');
+    if (warn) {
+      const hasNatural = allVoices.some(isNaturalVoice);
+      if (!hasNatural) {
+        warn.classList.remove('hidden');
+        warn.innerHTML = 'Solo voces básicas detectadas. Para voces naturales, prueba <strong>Microsoft Edge</strong> o <strong>Chrome</strong>.';
+      } else {
+        warn.classList.add('hidden');
+      }
+    }
+  }
+  function onVoiceChange() {
+    const sel = document.getElementById('voice-select');
+    const v = allVoices.find(v => v.name === sel.value);
+    if (v) {
+      currentVoice = v;
+      localStorage.setItem('preferredVoice', v.name);
+    }
+  }
+  function testVoice() {
+    unlockAudio();
+    speak('Hola, soy tu asistente de español. Vamos a practicar el pretérito.');
+  }
+  function unlockAudio() {
+    if (audioUnlocked || !('speechSynthesis' in window)) return;
+    try {
+      const u = new SpeechSynthesisUtterance('');
+      u.volume = 0;
+      window.speechSynthesis.speak(u);
+    } catch (e) { /* iOS may throw — don't let it halt the click handler */ }
+    audioUnlocked = true;
+  }
+  function speak(text, opts) {
+    opts = opts || {};
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    if (currentVoice) {
+      u.voice = currentVoice;
+      u.lang = currentVoice.lang;
+    } else {
+      u.lang = 'es-ES';
+    }
+    // Slow rate (0.7x) for learner pacing — adjust here if Micah wants it faster.
+    u.rate = opts.rate != null ? opts.rate : 0.7;
+    u.pitch = 1;
+    if (opts.onend) u.onend = opts.onend;
+    if (opts.onstart) u.onstart = opts.onstart;
+    window.speechSynthesis.speak(u);
+  }
+  if ('speechSynthesis' in window) {
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    setTimeout(loadVoices, 200);
+    setTimeout(loadVoices, 1000);
+  }
+
+  // ---------- Theme ----------
+  let themeFilter = localStorage.getItem('themeFilter') || 'escape_cubano_story';
+  function onThemeChange() {
+    themeFilter = document.getElementById('theme-select').value;
+    localStorage.setItem('themeFilter', themeFilter);
+  }
+
+  // ---------- Navigation ----------
+  function goto(screen) {
+    unlockAudio();
+    document.querySelectorAll('section[id^="screen-"]').forEach(s => s.classList.add('hidden'));
+    document.getElementById('screen-' + screen).classList.remove('hidden');
+    window.scrollTo(0, 0);
+    if (screen === 'mode1') m1Init();
+    if (screen === 'mode2') m2Restart();
+    if (screen === 'mode3') m3Init();
+  }
+
+  // ---------- Utilities ----------
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  function normalize(s) {
+    if (!s) return '';
+    return s.toLowerCase()
+      .replace(/[.,;:!?"'`]+/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  // ---------- MODE 1 ----------
+  let m1Queue = [];
+  let m1Idx = 0;
+  let m1Total = 0;
+  function m1Init() {
+    document.getElementById('theme-select').value = themeFilter;
+    let pool = M1_ALL;
+    if (themeFilter !== 'all') {
+      pool = M1_ALL.filter(s => s.theme === themeFilter);
+    }
+    m1Queue = shuffle(pool);
+    m1Total = m1Queue.length;
+    m1Idx = 0;
+    document.getElementById('m1-end').classList.add('hidden');
+    document.getElementById('m1-play-card').classList.remove('hidden');
+    m1Render();
+    setTimeout(() => m1Play(), 350);
+  }
+  function m1Render() {
+    document.getElementById('m1-input').value = '';
+    document.getElementById('m1-reveal').classList.add('hidden');
+    document.getElementById('m1-progress').style.width = (m1Idx / m1Total * 100) + '%';
+    document.getElementById('m1-counter').textContent = (m1Idx + 1) + ' / ' + m1Total;
+  }
+  function m1Play() {
+    if (m1Idx >= m1Queue.length) return;
+    const s = m1Queue[m1Idx];
+    const btn = document.getElementById('m1-speaker');
+    btn.classList.add('playing');
+    speak(s.es, { onend: () => btn.classList.remove('playing') });
+  }
+  function m1Reveal() {
+    if (m1Idx >= m1Queue.length) return;
+    const s = m1Queue[m1Idx];
+    document.getElementById('m1-es').textContent = s.es;
+    document.getElementById('m1-en').textContent = '"' + s.en + '"';
+    document.getElementById('m1-tag').textContent = s.verb;
+    document.getElementById('m1-reveal').classList.remove('hidden');
+  }
+  function m1Next() {
+    m1Idx++;
+    if (m1Idx >= m1Queue.length) {
+      m1End();
+      return;
+    }
+    m1Render();
+    setTimeout(() => m1Play(), 200);
+  }
+  function m1End() {
+    document.getElementById('m1-play-card').classList.add('hidden');
+    const end = document.getElementById('m1-end');
+    end.classList.remove('hidden');
+    document.getElementById('m1-end-msg').textContent =
+      `${m1Total} sentence${m1Total === 1 ? '' : 's'} done.`;
+    document.getElementById('m1-progress').style.width = '100%';
+  }
+  function m1Restart() { m1Init(); }
+
+  // ---------- MODE 2 ----------
+  let m2Queue = [];
+  let m2Missed = [];      // current round's misses
+  let m2AllMissed = [];   // session-wide unique missed verbs (for review list)
+  let m2FirstMissedIds = new Set(); // track first-attempt misses
+  let m2Correct = 0;
+  let m2Wrong = 0;
+  let m2Round = 1;
+
+  function m2Restart() {
+    m2Queue = shuffle(M2_ALL.slice());
+    m2Missed = [];
+    m2AllMissed = [];
+    m2FirstMissedIds = new Set();
+    m2Correct = 0;
+    m2Wrong = 0;
+    m2Round = 1;
+    document.getElementById('m2-end').classList.add('hidden');
+    document.getElementById('m2-round-end').classList.add('hidden');
+    document.getElementById('m2-card').classList.remove('hidden');
+    document.getElementById('m2-round-pill').classList.add('hidden');
+    m2Render();
+  }
+  function m2Render() {
+    document.getElementById('m2-correct').textContent = m2Correct;
+    document.getElementById('m2-wrong').textContent = m2Wrong;
+    document.getElementById('m2-remaining').textContent = m2Queue.length;
+    document.getElementById('m2-feedback').className = 'feedback';
+    document.getElementById('m2-input').value = '';
+    if (m2Queue.length === 0) {
+      m2EndRound();
+      return;
+    }
+    const cur = m2Queue[0];
+    document.getElementById('m2-verb').textContent = cur.form;
+    const ctxEl = document.getElementById('m2-ctx');
+    if (cur.ctx) {
+      document.getElementById('m2-ctx-text').textContent = cur.ctx;
+      ctxEl.classList.remove('hidden');
+    } else {
+      ctxEl.classList.add('hidden');
+    }
+    document.getElementById('m2-input').focus();
+  }
+  function m2Submit() {
+    if (m2Queue.length === 0) return;
+    const cur = m2Queue[0];
+    const ans = normalize(document.getElementById('m2-input').value);
+    const fb = document.getElementById('m2-feedback');
+    if (!ans) return;
+    const isCorrect = cur.answers.some(a => normalize(a) === ans);
+    const verbId = `${cur.form}|${cur.inf}|${cur.pronoun}|${cur.ctx || ''}`;
+    if (isCorrect) {
+      // First-attempt only scoring
+      if (m2Round === 1) m2Correct++;
+      fb.className = 'feedback correct';
+      fb.innerHTML = '✓ Correcto';
+    } else {
+      if (m2Round === 1) {
+        m2Wrong++;
+        m2FirstMissedIds.add(verbId);
+        m2AllMissed.push(cur);
+      }
+      m2Missed.push(cur);
+      fb.className = 'feedback wrong';
+      fb.innerHTML = '✗ Not quite<div class="answer">Answer: ' + cur.primary + '</div>';
+    }
+    m2Queue.shift();
+    setTimeout(m2Render, 1100);
+  }
+  function m2EndRound() {
+    document.getElementById('m2-card').classList.add('hidden');
+    if (m2Missed.length === 0) {
+      const end = document.getElementById('m2-end');
+      end.classList.remove('hidden');
+      const total = M2_ALL.length;
+      document.getElementById('m2-end-msg').textContent =
+        m2Round === 1
+          ? `Perfect run — ${m2Correct} of ${total} on the first try.`
+          : `${m2Correct} of ${total} on the first try. Settled the rest by round ${m2Round}.`;
+      const reviewWrap = document.getElementById('m2-review');
+      const reviewRows = document.getElementById('m2-review-rows');
+      reviewRows.innerHTML = '';
+      if (m2AllMissed.length > 0) {
+        m2AllMissed.forEach(v => {
+          const row = document.createElement('div');
+          row.className = 'review-row';
+          row.innerHTML = `
+            <span class="form">${v.form}</span>
+            <span class="arrow">→</span>
+            <span class="meaning">${v.primary}${v.ctx ? ' <em style="color:var(--cream-dim);font-size:0.85em">(' + v.ctx + ')</em>' : ''}</span>
+          `;
+          reviewRows.appendChild(row);
+        });
+        reviewWrap.classList.remove('hidden');
+      } else {
+        reviewWrap.classList.add('hidden');
+      }
+    } else {
+      const re = document.getElementById('m2-round-end');
+      re.classList.remove('hidden');
+      document.getElementById('m2-round-title').textContent = `Round ${m2Round} Done`;
+      document.getElementById('m2-round-msg').textContent =
+        `${m2Missed.length} verb${m2Missed.length === 1 ? '' : 's'} owe you another shot.`;
+    }
+  }
+  function m2NextRound() {
+    m2Queue = shuffle(m2Missed);
+    m2Missed = [];
+    m2Round++;
+    document.getElementById('m2-round-end').classList.add('hidden');
+    document.getElementById('m2-card').classList.remove('hidden');
+    const pill = document.getElementById('m2-round-pill');
+    pill.textContent = `Round ${m2Round}`;
+    pill.classList.remove('hidden');
+    m2Render();
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const m2Active = !document.getElementById('screen-mode2').classList.contains('hidden');
+      if (m2Active && document.activeElement && document.activeElement.id === 'm2-input') {
+        e.preventDefault();
+        m2Submit();
+      }
+    }
+  });
+
+  // ---------- MODE 3 ----------
+  let m3Idx = 0;
+  let m3SubMode = 'reveal'; // 'reveal' or 'test'
+
+  function m3Init() {
+    m3Idx = 0;
+    m3Render();
+  }
+  function m3SetMode(mode) {
+    m3SubMode = mode;
+    document.getElementById('m3-tab-reveal').classList.toggle('active', mode === 'reveal');
+    document.getElementById('m3-tab-test').classList.toggle('active', mode === 'test');
+    m3Render();
+  }
+  function m3Render() {
+    const v = M3_ALL[m3Idx];
+    document.getElementById('m3-verb').textContent = v.inf;
+    const meaningEl = document.getElementById('m3-meaning');
+    if (m3SubMode === 'test') {
+      // In Test Me mode the meaning is part of what the student must produce — hide it.
+      meaningEl.textContent = '';
+      meaningEl.classList.add('hidden');
+    } else {
+      meaningEl.textContent = v.meaning;
+      meaningEl.classList.remove('hidden');
+    }
+    document.getElementById('m3-counter').textContent = (m3Idx + 1) + ' / ' + M3_ALL.length;
+
+    // hide all sub-views
+    document.getElementById('m3-table').classList.add('hidden');
+    document.getElementById('m3-table').innerHTML = '';
+    document.getElementById('m3-actions').classList.add('hidden');
+    document.getElementById('m3-test-form').classList.add('hidden');
+    document.getElementById('m3-test-form').innerHTML = '';
+    document.getElementById('m3-test-actions').classList.add('hidden');
+    document.getElementById('m3-test-feedback').classList.add('hidden');
+    document.getElementById('m3-test-feedback').className = 'feedback hidden';
+    document.getElementById('m3-test-after').classList.add('hidden');
+
+    const revealBtn = document.getElementById('m3-reveal-btn');
+    if (m3SubMode === 'reveal') {
+      revealBtn.textContent = 'Reveal & hear';
+      revealBtn.onclick = m3Reveal;
+      revealBtn.classList.remove('hidden');
+    } else {
+      revealBtn.textContent = 'Start test';
+      revealBtn.onclick = m3StartTest;
+      revealBtn.classList.remove('hidden');
+    }
+  }
+
+  function m3Reveal() {
+    const v = M3_ALL[m3Idx];
+    const tbl = document.getElementById('m3-table');
+    tbl.innerHTML = '';
+    v.forms.forEach((f, i) => {
+      const row = document.createElement('div');
+      row.className = 'conjug-row';
+      row.id = 'm3-row-' + i;
+      row.innerHTML = `
+        <div class="pronoun">${f[0]}</div>
+        <div class="conj">${f[1]}</div>
+        <button class="play-icon-btn" onclick="m3PlayOne(${i})">🔊</button>
+      `;
+      tbl.appendChild(row);
+    });
+    tbl.classList.remove('hidden');
+    document.getElementById('m3-actions').classList.remove('hidden');
+    document.getElementById('m3-reveal-btn').classList.add('hidden');
+    setTimeout(m3PlayAll, 250);
+  }
+  function m3PlayOne(i) {
+    const v = M3_ALL[m3Idx];
+    document.querySelectorAll('.conjug-row').forEach(r => r.classList.remove('highlight'));
+    const row = document.getElementById('m3-row-' + i);
+    if (row) row.classList.add('highlight');
+    speak(v.forms[i][0].split('/')[0].trim() + ' ' + v.forms[i][1], {
+      onend: () => row && row.classList.remove('highlight') });
+  }
+  function m3PlayAll() {
+    const v = M3_ALL[m3Idx];
+    let i = 0;
+    document.querySelectorAll('.conjug-row').forEach(r => r.classList.remove('highlight'));
+    function next() {
+      if (i >= v.forms.length) return;
+      const row = document.getElementById('m3-row-' + i);
+      if (row) {
+        document.querySelectorAll('.conjug-row').forEach(r => r.classList.remove('highlight'));
+        row.classList.add('highlight');
+      }
+      const idx = i;
+      speak(v.forms[idx][0].split('/')[0].trim() + ' ' + v.forms[idx][1], {
+        onend: () => { i++; setTimeout(next, 150); }
+      });
+    }
+    next();
+  }
+  function m3StartTest() {
+    const v = M3_ALL[m3Idx];
+    const form = document.getElementById('m3-test-form');
+    form.innerHTML = '';
+    // Meaning input first — student must also produce the English meaning.
+    const meaningRow = document.createElement('div');
+    meaningRow.className = 'conjug-row';
+    meaningRow.id = 'm3-meaning-row';
+    meaningRow.innerHTML = `
+      <div class="pronoun">meaning</div>
+      <input type="text" class="test-input" id="m3-test-meaning" data-idx="meaning" placeholder='e.g. "to travel"' autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
+    `;
+    form.appendChild(meaningRow);
+    v.forms.forEach((f, i) => {
+      const row = document.createElement('div');
+      row.className = 'conjug-row';
+      row.innerHTML = `
+        <div class="pronoun">${f[0]}</div>
+        <input type="text" class="test-input" id="m3-test-${i}" data-idx="${i}" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
+      `;
+      form.appendChild(row);
+    });
+    form.classList.remove('hidden');
+    document.getElementById('m3-test-actions').classList.remove('hidden');
+    document.getElementById('m3-reveal-btn').classList.add('hidden');
+    setTimeout(() => {
+      const first = document.getElementById('m3-test-meaning');
+      if (first) first.focus();
+    }, 80);
+  }
+  function checkMeaning(userInput, expected) {
+    function norm(s) {
+      return s.toLowerCase()
+        .replace(/\([^)]*\)/g, '')
+        .replace(/[.,;:!?"'`]+/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+    function variants(m) {
+      const n = norm(m);
+      const out = new Set([n]);
+      if (n.startsWith('to ')) out.add(n.slice(3));
+      else out.add('to ' + n);
+      return Array.from(out);
+    }
+    const ans = norm(userInput);
+    if (!ans) return false;
+    const alts = expected.split('|').map(s => s.trim()).filter(Boolean);
+    for (const a of alts) {
+      for (const v of variants(a)) {
+        if (v === ans) return true;
+      }
+    }
+    return false;
+  }
+  function m3CheckAll() {
+    const v = M3_ALL[m3Idx];
+    let correct = 0;
+    // Grade meaning first.
+    const meaningInp = document.getElementById('m3-test-meaning');
+    const meaningRow = document.getElementById('m3-meaning-row');
+    const userMeaning = (meaningInp.value || '').trim();
+    if (checkMeaning(userMeaning, v.meaning)) {
+      correct++;
+      meaningRow.classList.add('testme-correct');
+      meaningRow.innerHTML = `
+        <div class="pronoun">meaning</div>
+        <div class="conj">${v.meaning} ✓</div>
+      `;
+    } else {
+      meaningRow.classList.add('testme-wrong');
+      meaningRow.innerHTML = `
+        <div class="pronoun">meaning</div>
+        <div class="conj">${userMeaning || '—'}<span class="correct">✗ correct: ${v.meaning}</span></div>
+      `;
+    }
+    // Grade conjugations.
+    v.forms.forEach((f, i) => {
+      const inp = document.getElementById('m3-test-' + i);
+      const row = inp.parentElement;
+      const userVal = (inp.value || '').toLowerCase().trim();
+      const expected = (f[1] || '').toLowerCase().trim();
+      row.classList.remove('testme-correct', 'testme-wrong');
+      if (userVal === expected) {
+        correct++;
+        row.classList.add('testme-correct');
+        row.innerHTML = `
+          <div class="pronoun">${f[0]}</div>
+          <div class="conj">${f[1]} ✓</div>
+        `;
+      } else {
+        row.classList.add('testme-wrong');
+        row.innerHTML = `
+          <div class="pronoun">${f[0]}</div>
+          <div class="conj">${userVal || '—'}<span class="correct">✗ correct: ${f[1]}</span></div>
+        `;
+      }
+    });
+    const total = 1 + v.forms.length; // meaning + 5 conjugations
+    const fb = document.getElementById('m3-test-feedback');
+    const passThreshold = Math.ceil(total * 0.7);
+    fb.className = correct === total ? 'feedback correct' : (correct >= passThreshold ? 'feedback correct' : 'feedback wrong');
+    fb.classList.remove('hidden');
+    fb.innerHTML = `${correct} / ${total} correct`;
+    document.getElementById('m3-test-actions').classList.add('hidden');
+    document.getElementById('m3-test-after').classList.remove('hidden');
+  }
+  function m3Next() {
+    m3Idx = (m3Idx + 1) % M3_ALL.length;
+    m3Render();
+  }
+  // Tab/Enter advances inputs in Test Me
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    const el = document.activeElement;
+    if (!el || !el.classList || !el.classList.contains('test-input')) return;
+    e.preventDefault();
+    const idx = el.dataset.idx;
+    if (idx === 'meaning') {
+      const next = document.getElementById('m3-test-0');
+      if (next) next.focus();
+    } else {
+      const numIdx = parseInt(idx, 10);
+      const next = document.getElementById('m3-test-' + (numIdx + 1));
+      if (next) next.focus();
+      else m3CheckAll();
+    }
+  });
+
+  // ---------- iOS audio gesture warm-up ----------
+  document.addEventListener('click', function() {
+    try {
+      if ('speechSynthesis' in window && allVoices.length === 0) loadVoices();
+      unlockAudio();
+    } catch (e) { /* never let warm-up halt a click */ }
+  });
+  document.addEventListener('touchstart', function() {
+    try { unlockAudio(); } catch (e) {}
+  }, { passive: true });
+
+  // ---------- Wire mode buttons via addEventListener (more robust than inline onclick on iOS) ----------
+  document.querySelectorAll('.mode-card[data-mode]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      goto(btn.getAttribute('data-mode'));
+    });
+  });
+
+  // ---------- Mark JS as fully initialized so we can confirm load on iPhone ----------
+  (function() {
+    var v = document.getElementById('js-version');
+    if (v) v.textContent = 'For Micah · v6 · ' + M1_ALL.length + ' sentences · ' + M2_ALL.length + ' verbs · Offline';
+  })();
+</script>
+</body>
+</html>
